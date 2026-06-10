@@ -1,0 +1,152 @@
+%==============================================================================
+%  ATS-Friendly Resume — compile: pdflatex resume.tex
+%==============================================================================
+
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[margin=0.6in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{tabularx}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=black,
+  citecolor=black,
+  pdfauthor={Lavudya Rajaram},
+  pdftitle={Lavudya Rajaram - Resume}
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+\titleformat{\section}{\large\bfseries\uppercase}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{10pt}{4pt}
+
+\setlist[itemize]{leftmargin=*, topsep=2pt, itemsep=1pt, parsep=0pt, partopsep=0pt}
+
+%------------------------------------------------------------------------------
+%  PERSONAL INFORMATION
+%------------------------------------------------------------------------------
+\newcommand{\resumename}{LAVUDYA RAJARAM}
+\newcommand{\resumeemail}{codeml862@gmail.com}
+\newcommand{\resumephone}{+91-7093221536}
+\newcommand{\resumelocation}{Mahendergarh, Haryana, India}
+\newcommand{\resumelinkedin}{linkedin.com/in/lavudyaraja5228}
+\newcommand{\resumegithub}{github.com/lavudyaraja}
+\newcommand{\resumeportfolio}{lavudyaraja.in}
+
+\begin{document}
+
+% --- Header ---
+\begin{center}
+  {\LARGE \textbf{\resumename}} \\[6pt]
+  \resumephone \;|\; \resumeemail \;|\; \resumelocation \\[2pt]
+  \href{https://\resumelinkedin}{\resumelinkedin} \;|\;
+  \href{https://\resumegithub}{\resumegithub} \;|\;
+  \href{https://\resumeportfolio}{\resumeportfolio}
+\end{center}
+
+\vspace{4pt}
+
+% --- Summary ---
+\section{Summary}
+Computer science undergraduate with strong expertise in \textbf{machine learning} and \textbf{full-stack development}, having designed and trained \textbf{BiDCNet} --- a novel hybrid \textbf{CNN--Transformer} model with bidirectional dual cross-attention achieving \textbf{98.56\% accuracy} for tomato leaf disease classification. Built production-grade AI applications including a \textbf{RAG engine}, a \textbf{video conferencing platform}, and \textbf{Sui-DAT}, a blockchain-powered decentralized AI training system. Proficient in \textbf{Python}, \textbf{PyTorch}, \textbf{TensorFlow}, and modern web frameworks, with hands-on experience leveraging AI-assisted development tools; actively seeking a \textbf{machine learning engineering internship}.
+
+% --- Education ---
+\section{Education}
+
+\textbf{Central University of Haryana} \hfill Nov 2022 -- Nov 2026 \\
+B.Tech, Computer Science \& Engineering \hfill CGPA: 7.5 / 10 \\[4pt]
+
+\textbf{TTWREIS Boys Narsapur} \hfill Jun 2019 -- Jun 2021 \\
+Board of Intermediate, PCM \hfill Percentage: 91\%
+
+% --- Experience ---
+\section{Experience}
+
+\textbf{Research Intern} \hfill Jan 2026 -- Jun 2026 \\
+\textit{University of Delhi, Delhi, India} \hfill \textit{Supervisor: Dr. Bharti}
+\begin{itemize}
+  \item Novel Proposed and implemented \textbf{BiDCNet} (Bidirectional Dual Cross-Attention Network), a hybrid architecture fusing a pretrained \textbf{ResNet-50} CNN branch with a scratch-trained \textbf{Vision Transformer (ViT)} branch via a two-stage bidirectional cross-attention mechanism.
+  \item Developed a \textbf{dual cross-attention} fusion strategy: Stage\,1 uses dense global cross-attention to align CNN feature maps with ViT patch tokens; Stage\,2 applies \textbf{sparse top-$K$ token scoring} to focus on the most discriminative disease-relevant regions, achieving \textbf{99.03\% test accuracy} on the PlantVillage tomato subset.
+  \item Integrated \textbf{Grad-CAM++} for visual model explainability and deployed the full inference pipeline as a \textbf{Next.js} web application (\href{https://tomatoguard-ai.vercel.app}{tomatoguard-ai.vercel.app}) with \textbf{Cloudinary} asset hosting and \textbf{Neon PostgreSQL} prediction logging.
+\end{itemize}
+
+\vspace{4pt}
+
+% --- Projects ---
+\section{Key Projects}
+
+\textbf{InsightRAG --- PDF Parsing \& Citation-Source RAG Engine} \hfill Jan 2026 -- Present \\
+\href{https://github.com/lavudyaraja}{github.com/lavudyaraja} \;|\; Next.js 15, TypeScript, Neon PostgreSQL, pgvector, Gemini API, Vercel
+\begin{itemize}
+  \item Built a production-grade \textbf{Retrieval-Augmented Generation (RAG)} platform supporting \textbf{PDF, DOCX, CSV, JSON} ingestion with \textbf{hybrid search} (vector + BM25 full-text) and streaming LLM responses with clickable \textbf{[Source N]} citations.
+  \item Implemented \textbf{Reciprocal Rank Fusion (RRF)} across multi-query expansions using \textbf{pgvector} and PostgreSQL \texttt{tsvector}, achieving sub-2s query latency on indexed document corpora.
+  \item Integrated \textbf{LLM provider fallback} (Gemini $\rightarrow$ NVIDIA Qwen) with quota-aware error handling, real-time \textbf{Server-Sent Events (SSE)} streaming, and a retrieval trace/analytics panel with RAGAS evaluation.
+  \item Deployed on \textbf{Vercel} with serverless Node.js APIs; built session-based chat, multi-document scoping, and an interactive document viewer with HTML table rendering for academic PDFs.
+\end{itemize}
+
+\vspace{4pt}
+\textbf{AI-Powered Meeting Management Platform} \hfill Sep 2025 -- Nov 2025
+\begin{itemize}
+  \item Implemented a full-stack video conferencing application using \textbf{WebRTC}, \textbf{React}, and \textbf{Node.js}, improving real-time peer-to-peer communication by 10\%.
+  \item Deployed a collaborative whiteboard with live synchronization, AI-driven meeting summaries, and speech recognition, increasing team productivity by \textbf{30\%}.
+  \item Integrated AI-driven transcription, translation, and summarization features using the \textbf{OpenAI API} and Python to enhance meeting workflows.
+\end{itemize}
+
+\vspace{4pt}
+\textbf{Sui-DAT --- Decentralized AI Training Platform (Walrus Haulout Hackathon)} \hfill Oct 2025 -- Nov 2025 \\
+\href{https://github.com/lavudyaraja}{github.com/lavudyaraja} \;|\; Next.js 14, TypeScript, FastAPI, Python, Sui Blockchain, Walrus, MongoDB, React Flow
+\begin{itemize}
+  \item Architected a full-stack \textbf{decentralized AI training platform} (Sui-DAT) using \textbf{Next.js 14}, \textbf{TypeScript}, \textbf{FastAPI}, and Python with a scalable microservices design, submitted to the \textbf{Walrus Haulout Hackathon --- AI x Data Track}.
+  \item Wrote \textbf{Sui Move smart contracts} (Model and Contributor modules) to manage on-chain AI model versioning, training workflow orchestration, gradient aggregation, and transparent \textbf{contributor reputation and reward} distribution.
+  \item Integrated \textbf{Walrus decentralized storage} to persist training data, gradients, and model checkpoints on-chain, enabling fully distributed federated learning without centralized data centers.
+  \item Built a real-time dashboard with \textbf{React Flow} and \textbf{Sui wallet} integration to visualize training progress, manage contributors, and surface live performance metrics backed by \textbf{MongoDB} persistence and \textbf{OpenAI}-powered hyperparameter suggestions.
+\end{itemize}
+
+\vspace{4pt}
+\textbf{AI Platform Frontend} \hfill Jan 2026 -- Present
+\begin{itemize}
+  \item Developed a modern AI platform frontend using \textbf{Next.js 15} and \textbf{React 19}, incorporating autonomous agent systems and retrieval-augmented generation (RAG).
+  \item Improved user engagement and workflow efficiency by \textbf{25\%} through optimized UI components built with TypeScript and Tailwind CSS, including voice input and real-time chat.
+  \item Strengthened overall user experience by delivering responsive, dynamic interfaces aligned with modern frontend best practices.
+\end{itemize}
+
+\vspace{4pt}
+\textbf{AI-Powered Multi-Agent Exam Evaluation Platform} \hfill Jan 2026 -- Present \\
+\href{https://github.com/lavudyaraja}{github.com/lavudyaraja} \;|\; Next.js 16, React 19, TypeScript, Prisma, PostgreSQL, Anthropic Claude, Groq, Tailwind CSS, Socket.io
+\begin{itemize}
+  \item Architected a \textbf{multi-agent orchestration system} for automated exam evaluation, comprising a \textbf{Coordinator Agent} for subject detection and task routing, a \textbf{Vision Expert Agent} for high-fidelity handwriting and diagram transcription, subject-specific \textbf{Expert Agents} (Mathematics, Science, Humanities), and a \textbf{Reviewer Agent} for rubric-aligned cross-verification.
+  \item Engineered a \textbf{Vision Expert} pipeline using multi-pass LLM vision analysis to extract semantic content from handwritten answer sheets, achieving high-accuracy transcription with diagram context matching.
+  \item Built a real-time evaluation dashboard with \textbf{live agent status updates} (e.g., ``Math Expert is analysing logical steps\ldots'') powered by \textbf{Socket.io}, with full exam lifecycle management and per-student grading analytics.
+  \item Implemented a \textbf{Coordinator-Reviewer verification loop} backed by \textbf{Anthropic Claude} and \textbf{Groq} APIs for 99\% grading accuracy, with \textbf{Prisma ORM} and \textbf{PostgreSQL} persistence and role-based access control via \textbf{NextAuth}.
+\end{itemize}
+
+% --- Skills ---
+\section{Technical Skills}
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\textbf{Programming Languages:} & C, C++, Python, JavaScript, DSA, OOP \\
+\textbf{Web \& Backend:} & HTML, CSS, Tailwind CSS, Next.js, TypeScript, FastAPI, REST APIs \\
+\textbf{Databases \& Infrastructure:} & MySQL, MongoDB (Beginner), Supabase, Prisma ORM, Redis, Celery \\
+\textbf{ML \& Deep Learning:} & Scikit-learn, NumPy, Pandas, TensorFlow, Keras, PyTorch, timm, Optuna, Matplotlib, Seaborn, OpenCV, CNN, ViT, Hybrid ViT \\
+\textbf{Computer Vision:} & Image Classification, Disease Detection, Streamlit \\
+\textbf{AI Tools:} & Cursor, Claude (Anthropic), Antigravity IDE, Windsurf, GitHub Copilot, ChatGPT, Gemini \\
+\textbf{Tools \& OS:} & Git, Jupyter, Anaconda, \LaTeX, MS Office, Windows, Linux \\
+\end{tabularx}
+
+% --- Certifications ---
+\section{Certifications}
+\begin{itemize}
+  \item \textbf{Python for Machine Learning -- Linear Regression} (Online Certification) --- Covered data preprocessing, model building, training, evaluation, and performance metrics using Python.
+  \item \textbf{Web Development Fundamentals} (HTML, CSS, JavaScript) (Online Certification) --- Gained hands-on experience in building responsive web pages and interactive user interfaces.
+  \item \textbf{C++ Programming} (Online Certification) --- Learned core programming concepts including OOP, data structures, and problem-solving using C++.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Evaluation System — Complete Codebase Documentation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"DM Serif Display"', 'Georgia', 'serif'],
+            body:    ['"DM Sans"', 'sans-serif'],
+            mono:    ['"DM Mono"', 'monospace'],
+          },
+          colors: {
+            ink:         '#111111',
+            muted:       '#6b7280',
+            rule:        '#e5e7eb',
+            accent:      '#1a56db',
+            accentLight: '#eff6ff',
+            tag:         '#f3f4f6',
+            win:         '#f0fdf4',
+            winBorder:   '#86efac',
+            winText:     '#166534',
+            warn:        '#fefce8',
+            warnBorder:  '#fde047',
+            warnText:    '#713f12',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body  { font-family: 'DM Sans', sans-serif; }
+    h1,h2,h3 { font-family: 'DM Serif Display', Georgia, serif; }
+    code,pre  { font-family: 'DM Mono', monospace; }
+    html  { scroll-behavior: smooth; }
+    pre   { overflow-x: auto; }
+
+    .nav-link { transition: color .15s, border-color .15s; }
+    .nav-link:hover { color: #1a56db; border-left-color: #1a56db; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .section-card { animation: fadeUp .35s ease both; }
+
+    table { width:100%; border-collapse:collapse; }
+    th {
+      background:#f9fafb; font-weight:600; text-align:left;
+      padding:10px 14px; font-size:.78rem; text-transform:uppercase;
+      letter-spacing:.07em; color:#6b7280; border-bottom:1px solid #e5e7eb;
+    }
+    td { padding:10px 14px; border-bottom:1px solid #f3f4f6; font-size:.875rem; vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    .winner-cell { background:#f0fdf4; color:#166534; font-weight:600; }
+  </style>
+</head>
+<body class="bg-white text-ink antialiased">
+
+  <!-- TOP BAR -->
+  <header class="border-b border-rule sticky top-0 bg-white z-50">
+    <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="w-7 h-7 rounded-md bg-accent flex items-center justify-center text-white text-xs font-bold font-mono">AI</span>
+        <span class="font-display text-base tracking-tight">AI Evaluation System</span>
+        <span class="ml-2 px-2 py-0.5 rounded text-xs font-mono bg-tag text-muted border border-rule">v0.2.0</span>
+      </div>
+      <div class="hidden md:flex items-center gap-5 text-sm text-muted">
+        <a href="#overview"    class="hover:text-ink transition-colors">Overview</a>
+        <a href="#architecture" class="hover:text-ink transition-colors">Architecture</a>
+        <a href="#engine"      class="hover:text-ink transition-colors">AI Engine</a>
+        <a href="#api"         class="hover:text-ink transition-colors">API</a>
+        <a href="#setup"       class="hover:text-ink transition-colors">Setup</a>
+        <a href="#costs"       class="hover:text-ink transition-colors">Costs</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto flex">
+
+    <!-- SIDEBAR -->
+    <aside class="hidden lg:block w-60 shrink-0 border-r border-rule min-h-screen sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto pt-8 pb-16 px-5">
+      <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">Contents</p>
+      <nav class="flex flex-col gap-0.5 text-sm">
+        <a href="#overview"      class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">System Overview</a>
+        <a href="#architecture"  class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Architecture</a>
+        <a href="#tech"          class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Core Technologies</a>
+        <a href="#structure"     class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Project Structure</a>
+        <a href="#engine"        class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">AI Engine</a>
+        <a href="#schema"        class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Database Schema</a>
+        <a href="#api"           class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">API Endpoints</a>
+        <a href="#components"    class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Frontend Components</a>
+        <a href="#education"     class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Education Levels</a>
+        <a href="#setup"         class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Setup & Deployment</a>
+        <a href="#costs"         class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Token Usage & Costs</a>
+        <a href="#config"        class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Configuration</a>
+        <a href="#security"      class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Security & Performance</a>
+        <a href="#roadmap"       class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Future Enhancements</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 min-w-0 px-8 py-12 max-w-4xl">
+
+      <!-- HERO -->
+      <section id="overview" class="mb-14 section-card">
+        <p class="text-xs font-mono text-accent font-medium uppercase tracking-widest mb-3">Documentation · March 2026</p>
+        <h1 class="text-5xl font-display text-ink leading-tight mb-4">AI Evaluation<br /><em>System</em></h1>
+        <p class="text-lg text-muted font-light leading-relaxed max-w-2xl mb-6">
+          An AI-powered evaluation and grading system that processes handwritten answer scripts using advanced vision language models — with human-like accuracy across multiple subjects and education levels.
+        </p>
+
+        <!-- Stat strip -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-px border border-rule rounded-xl overflow-hidden bg-rule mt-8">
+          <div class="bg-white px-5 py-4">
+            <p class="text-2xl font-display">3-Pass</p>
+            <p class="text-xs text-muted mt-1">Evaluation pipeline</p>
+          </div>
+          <div class="bg-white px-5 py-4">
+            <p class="text-2xl font-display">24</p>
+            <p class="text-xs text-muted mt-1">API endpoints</p>
+          </div>
+          <div class="bg-white px-5 py-4">
+            <p class="text-2xl font-display">14</p>
+            <p class="text-xs text-muted mt-1">Page components</p>
+          </div>
+          <div class="bg-white px-5 py-4">
+            <p class="text-2xl font-display">4</p>
+            <p class="text-xs text-muted mt-1">Subjects supported</p>
+          </div>
+        </div>
+
+        <!-- Key features -->
+        <div class="mt-8 grid sm:grid-cols-2 gap-3">
+          <div class="border border-rule rounded-xl p-4 flex gap-3">
+            <span class="text-lg shrink-0">👁️</span>
+            <div><p class="font-semibold text-sm">Direct AI Vision Reading</p><p class="text-xs text-muted mt-0.5">No OCR middleware required</p></div>
+          </div>
+          <div class="border border-rule rounded-xl p-4 flex gap-3">
+            <span class="text-lg shrink-0">🔄</span>
+            <div><p class="font-semibold text-sm">Three-Pass Evaluation</p><p class="text-xs text-muted mt-0.5">Transcription → Analysis → Marking</p></div>
+          </div>
+          <div class="border border-rule rounded-xl p-4 flex gap-3">
+            <span class="text-lg shrink-0">🎓</span>
+            <div><p class="font-semibold text-sm">Multi-Level Education</p><p class="text-xs text-muted mt-0.5">Intermediate, Graduation, Post-Graduation</p></div>
+          </div>
+          <div class="border border-rule rounded-xl p-4 flex gap-3">
+            <span class="text-lg shrink-0">⚡</span>
+            <div><p class="font-semibold text-sm">Dual AI Providers</p><p class="text-xs text-muted mt-0.5">Groq Llama 4 & Claude Sonnet 4.6</p></div>
+          </div>
+          <div class="border border-rule rounded-xl p-4 flex gap-3">
+            <span class="text-lg shrink-0">📡</span>
+            <div><p class="font-semibold text-sm">Real-time Progress</p><p class="text-xs text-muted mt-0.5">Live evaluation status updates</p></div>
+          </div>
+          <div class="border border-rule rounded-xl p-4 flex gap-3">
+            <span class="text-lg shrink-0">📝</span>
+            <div><p class="font-semibold text-sm">Comprehensive Feedback</p><p class="text-xs text-muted mt-0.5">Detailed analysis and suggestions</p></div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- ARCHITECTURE -->
+      <section id="architecture" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Architecture</h2>
+
+        <!-- High-level diagram -->
+        <div class="border border-rule rounded-xl p-5 font-mono text-xs text-muted leading-loose mb-8">
+          <p class="text-sm font-body font-medium text-ink mb-4">High-Level Architecture</p>
+          <pre class="overflow-x-auto"><code>┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   API Layer      │    │   AI Services   │
+│   (Next.js)     │◄──►│   (Next.js)      │◄──►│   (Groq/Claude) │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   UI Components │    │ Business Logic   │    │  Vision Models  │
+│   (React/TSX)   │    │   (Services)     │    │   (AI APIs)     │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   shadcn/ui     │    │   Evaluation     │    │   Database      │
+│   Components    │    │   Engine         │    │   (PostgreSQL)  │
+└─────────────────┘    └──────────────────┘    └─────────────────┘</code></pre>
+        </div>
+
+        <!-- Data flow -->
+        <div class="border border-rule rounded-xl overflow-hidden">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Data Flow</p>
+          </div>
+          <div class="divide-y divide-rule">
+            <div class="flex gap-4 px-5 py-4">
+              <div class="w-7 h-7 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0">1</div>
+              <div><p class="font-semibold text-sm">Upload</p><p class="text-sm text-muted">Student submits handwritten answer (PDF or Image)</p></div>
+            </div>
+            <div class="flex gap-4 px-5 py-4">
+              <div class="w-7 h-7 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0">2</div>
+              <div><p class="font-semibold text-sm">Extract</p><p class="text-sm text-muted">AI vision model reads and transcribes content directly</p></div>
+            </div>
+            <div class="flex gap-4 px-5 py-4">
+              <div class="w-7 h-7 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0">3</div>
+              <div><p class="font-semibold text-sm">Analyze</p><p class="text-sm text-muted">AI performs semantic analysis on transcribed text</p></div>
+            </div>
+            <div class="flex gap-4 px-5 py-4">
+              <div class="w-7 h-7 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0">4</div>
+              <div><p class="font-semibold text-sm">Evaluate</p><p class="text-sm text-muted">AI awards marks based on analysis and rubric</p></div>
+            </div>
+            <div class="flex gap-4 px-5 py-4">
+              <div class="w-7 h-7 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0">5</div>
+              <div><p class="font-semibold text-sm">Store</p><p class="text-sm text-muted">Results saved to PostgreSQL database with detailed feedback</p></div>
+            </div>
+            <div class="flex gap-4 px-5 py-4">
+              <div class="w-7 h-7 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0">6</div>
+              <div><p class="font-semibold text-sm">Display</p><p class="text-sm text-muted">Comprehensive results rendered to user interface</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- TECHNOLOGIES -->
+      <section id="tech" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Core Technologies</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">Frontend Stack</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex justify-between"><span class="text-muted">Framework</span><span class="font-medium">Next.js 16.1.1 App Router</span></li>
+              <li class="flex justify-between"><span class="text-muted">Language</span><span class="font-medium">TypeScript</span></li>
+              <li class="flex justify-between"><span class="text-muted">Styling</span><span class="font-medium">Tailwind CSS 4</span></li>
+              <li class="flex justify-between"><span class="text-muted">Components</span><span class="font-medium">shadcn/ui + Radix UI</span></li>
+              <li class="flex justify-between"><span class="text-muted">Animation</span><span class="font-medium">Framer Motion</span></li>
+              <li class="flex justify-between"><span class="text-muted">Forms</span><span class="font-medium">React Hook Form</span></li>
+              <li class="flex justify-between"><span class="text-muted">Server State</span><span class="font-medium">TanStack Query</span></li>
+            </ul>
+          </div>
+
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">Backend Stack</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex justify-between"><span class="text-muted">API</span><span class="font-medium">Next.js API Routes</span></li>
+              <li class="flex justify-between"><span class="text-muted">ORM</span><span class="font-medium">Prisma 6.11.1</span></li>
+              <li class="flex justify-between"><span class="text-muted">Database</span><span class="font-medium">PostgreSQL</span></li>
+              <li class="flex justify-between"><span class="text-muted">Validation</span><span class="font-medium">Zod</span></li>
+              <li class="flex justify-between"><span class="text-muted">Linting</span><span class="font-medium">ESLint</span></li>
+              <li class="flex justify-between"><span class="text-muted">DB Admin</span><span class="font-medium">Prisma Studio</span></li>
+            </ul>
+          </div>
+
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">AI Services</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex justify-between"><span class="text-muted">Groq SDK</span><span class="font-medium">Llama 4 Scout</span></li>
+              <li class="flex justify-between"><span class="text-muted">Anthropic SDK</span><span class="font-medium">Claude Sonnet 4.6</span></li>
+              <li class="flex justify-between"><span class="text-muted">Image Processing</span><span class="font-medium">Sharp</span></li>
+              <li class="flex justify-between"><span class="text-muted">PDF Extraction</span><span class="font-medium">unpdf</span></li>
+            </ul>
+          </div>
+
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">AI Model Strings</p>
+            <ul class="space-y-3 text-sm">
+              <li>
+                <p class="text-muted text-xs mb-1">Groq (Text + Vision)</p>
+                <code class="text-xs bg-tag border border-rule px-2 py-1 rounded block break-all">meta-llama/llama-4-scout-17b-16e-instruct</code>
+              </li>
+              <li>
+                <p class="text-muted text-xs mb-1">Claude (Text + Vision)</p>
+                <code class="text-xs bg-tag border border-rule px-2 py-1 rounded block">claude-sonnet-4-6</code>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- PROJECT STRUCTURE -->
+      <section id="structure" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Project Structure</h2>
+        <pre class="text-xs font-mono bg-tag border border-rule rounded-xl px-5 py-5 leading-relaxed text-ink overflow-x-auto"><code>d:/workspace/
+├── src/
+│   ├── app/                          <span class="text-muted"># Next.js App Router</span>
+│   │   ├── api/                      <span class="text-muted"># API Routes (24 endpoints)</span>
+│   │   │   ├── dashboard/            <span class="text-muted"># Dashboard statistics</span>
+│   │   │   ├── evaluate/             <span class="text-muted"># Evaluation endpoints</span>
+│   │   │   ├── exams/                <span class="text-muted"># Exam management</span>
+│   │   │   ├── evaluations/          <span class="text-muted"># Evaluation CRUD</span>
+│   │   │   └── extract-*/            <span class="text-muted"># AI extraction services</span>
+│   │   ├── [pages]/                  <span class="text-muted"># Page components (14 pages)</span>
+│   │   ├── layout.tsx                <span class="text-muted"># Root layout</span>
+│   │   └── page.tsx                  <span class="text-muted"># Home page</span>
+│   ├── components/
+│   │   ├── evaluate/                 <span class="text-muted"># Evaluation UI</span>
+│   │   ├── exam/                     <span class="text-muted"># Exam management</span>
+│   │   ├── layout/                   <span class="text-muted"># Layout components</span>
+│   │   ├── result/                   <span class="text-muted"># Results display</span>
+│   │   ├── review/                   <span class="text-muted"># Review interface</span>
+│   │   └── ui/                       <span class="text-muted"># shadcn/ui components</span>
+│   ├── lib/
+│   │   ├── ai/                       <span class="text-muted"># AI Provider implementations</span>
+│   │   ├── education/                <span class="text-muted"># Subject-specific logic</span>
+│   │   ├── single-pass/              <span class="text-muted"># Alternative evaluation</span>
+│   │   ├── evaluation-service.ts     <span class="text-muted"># Main evaluation engine</span>
+│   │   └── [other services]
+│   ├── hooks/                        <span class="text-muted"># Custom React hooks</span>
+│   ├── types/                        <span class="text-muted"># TypeScript definitions</span>
+│   └── [config files]
+├── prisma/
+│   └── schema.prisma                 <span class="text-muted"># Database schema</span>
+├── public/                           <span class="text-muted"># Static assets</span>
+└── [config files]</code></pre>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- AI ENGINE -->
+      <section id="engine" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-2">AI Evaluation Engine</h2>
+        <p class="text-muted text-sm mb-8">A sophisticated three-pass approach that isolates each concern at <code class="text-xs bg-tag border border-rule px-1.5 py-0.5 rounded">temperature=0</code> for deterministic, fair output.</p>
+
+        <!-- Three passes -->
+        <div class="flex flex-col gap-0 mb-8">
+          <div class="border border-rule rounded-t-xl p-5 flex gap-4">
+            <div class="w-8 h-8 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5">1</div>
+            <div>
+              <div class="flex items-center gap-3 mb-1">
+                <p class="font-semibold text-sm">Vision Transcription</p>
+                <span class="text-xs font-mono bg-tag border border-rule px-2 py-0.5 rounded text-muted">4,096 max tokens</span>
+              </div>
+              <p class="text-sm text-muted">AI vision model reads handwriting directly into plain text with confidence scores. No OCR layer.</p>
+              <div class="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-tag border border-rule rounded-lg px-3 py-2"><span class="text-muted">Purpose:</span> Extract handwritten text from images</div>
+                <div class="bg-tag border border-rule rounded-lg px-3 py-2"><span class="text-muted">Output:</span> Raw transcribed text + confidence</div>
+              </div>
+            </div>
+          </div>
+          <div class="border-x border-b border-rule p-5 flex gap-4">
+            <div class="w-8 h-8 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5">2</div>
+            <div>
+              <div class="flex items-center gap-3 mb-1">
+                <p class="font-semibold text-sm">Semantic Analysis</p>
+                <span class="text-xs font-mono bg-tag border border-rule px-2 py-0.5 rounded text-muted">4,096 max tokens</span>
+              </div>
+              <p class="text-sm text-muted">Text model evaluates conceptual coverage, grammar, keywords, completeness, and factual accuracy.</p>
+              <div class="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-tag border border-rule rounded-lg px-3 py-2"><span class="text-muted">Purpose:</span> Analyze understanding & concepts</div>
+                <div class="bg-tag border border-rule rounded-lg px-3 py-2"><span class="text-muted">Output:</span> Semantic scores across 5 dimensions</div>
+              </div>
+            </div>
+          </div>
+          <div class="border-x border-b border-rule rounded-b-xl p-5 flex gap-4">
+            <div class="w-8 h-8 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5">3</div>
+            <div>
+              <div class="flex items-center gap-3 mb-1">
+                <p class="font-semibold text-sm">Mark Award</p>
+                <span class="text-xs font-mono bg-tag border border-rule px-2 py-0.5 rounded text-muted">4,096 max tokens</span>
+              </div>
+              <p class="text-sm text-muted">Text model translates semantic scores into final marks using rubric and education-level weights.</p>
+              <div class="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-tag border border-rule rounded-lg px-3 py-2"><span class="text-muted">Purpose:</span> Assign final marks fairly</div>
+                <div class="bg-tag border border-rule rounded-lg px-3 py-2"><span class="text-muted">Output:</span> Final marks + detailed reasoning</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Semantic scoring interface -->
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">SemanticScore Interface (TypeScript)</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>interface SemanticScore {
+  conceptualCoverage: number  <span class="text-muted">// % of core ideas present</span>
+  grammarCoherence:   number  <span class="text-muted">// sentence structure + logical flow</span>
+  keywordRelevance:   number  <span class="text-muted">// domain terms used correctly</span>
+  completeness:       number  <span class="text-muted">// all required parts addressed</span>
+  accuracyScore:      number  <span class="text-muted">// factual / logical correctness</span>
+  composite:          number  <span class="text-muted">// weighted total — drives mark calculation</span>
+}</code></pre>
+        </div>
+
+        <!-- Weight distribution table -->
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <table>
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Conceptual</th>
+                <th>Grammar</th>
+                <th>Keywords</th>
+                <th>Complete</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="font-medium">Beginner</td><td>35%</td><td>10%</td><td>25%</td><td>20%</td><td>10%</td></tr>
+              <tr><td class="font-medium">Intermediate</td><td>30%</td><td>15%</td><td>20%</td><td>20%</td><td>15%</td></tr>
+              <tr><td class="font-medium">Expert</td><td>25%</td><td>20%</td><td>15%</td><td>20%</td><td>20%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Single-pass note -->
+        <div class="border border-accent/20 bg-accentLight rounded-xl px-5 py-4">
+          <p class="font-semibold text-sm mb-1">Alternative — Single-Pass Evaluation</p>
+          <p class="text-sm text-muted">For faster processing, the system also supports single-pass evaluation via <code class="text-xs bg-white border border-rule px-1.5 py-0.5 rounded">src/lib/single-pass/claude-single.ts</code> — direct vision + evaluation in one API call, suitable for quick evaluations where deep analysis isn't critical.</p>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- DATABASE SCHEMA -->
+      <section id="schema" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Database Schema</h2>
+
+        <!-- ERD summary -->
+        <div class="border border-rule rounded-xl p-5 mb-6">
+          <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">Model Relationships</p>
+          <div class="grid sm:grid-cols-3 gap-3 text-sm">
+            <div class="border border-rule rounded-lg p-3 text-center">
+              <p class="font-semibold">User</p>
+              <p class="text-xs text-muted mt-1">creates Exams<br />links to Evaluations</p>
+            </div>
+            <div class="border border-rule rounded-lg p-3 text-center">
+              <p class="font-semibold">Exam</p>
+              <p class="text-xs text-muted mt-1">contains Questions<br />has Documents</p>
+            </div>
+            <div class="border border-rule rounded-lg p-3 text-center">
+              <p class="font-semibold">Evaluation</p>
+              <p class="text-xs text-muted mt-1">links Exam + Document<br />has QuestionEvaluations</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schema code blocks -->
+        <div class="space-y-4">
+
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-accent"></span>
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">model User</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed overflow-x-auto"><code>model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  exams       Exam[]
+  evaluations Evaluation[]
+}</code></pre>
+          </div>
+
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-accent"></span>
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">model Exam</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed overflow-x-auto"><code>model Exam {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  subject     String?
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User?      @relation(fields: [createdById], references: [id])
+  questions   Question[]
+  documents   Document[]
+  evaluations Evaluation[]
+}</code></pre>
+          </div>
+
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-accent"></span>
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">model Question</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed overflow-x-auto"><code>model Question {
+  id             String   @id @default(cuid())
+  examId         String
+  questionNumber Int
+  questionText   String
+  maxMarks       Float
+  modelAnswer    String?
+  rubric         String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  exam        Exam                 @relation(fields: [examId], references: [id], onDelete: Cascade)
+  evaluations QuestionEvaluation[]
+}</code></pre>
+          </div>
+
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-accent"></span>
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">model Document</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed overflow-x-auto"><code>model Document {
+  id          String    @id @default(cuid())
+  examId      String
+  fileName    String
+  fileUrl     String
+  fileType    String    <span class="text-muted">// 'pdf' or 'image'</span>
+  pageCount   Int
+  uploadedAt  DateTime  @default(now())
+  processedAt DateTime?
+
+  exam        Exam         @relation(fields: [examId], references: [id], onDelete: Cascade)
+  evaluations Evaluation[]
+}</code></pre>
+          </div>
+
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-accent"></span>
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">model Evaluation</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed overflow-x-auto"><code>model Evaluation {
+  id              String   @id @default(cuid())
+  documentId      String?
+  examId          String?
+  studentName     String?
+  totalMarks      Float
+  maxMarks        Float
+  percentage      Float
+  grade           String?
+  overallFeedback String
+  confidence      Float
+  status          String   <span class="text-muted">// 'processing' | 'completed' | 'failed'</span>
+  evaluatedAt     DateTime @default(now())
+  evaluatedById   String?
+
+  exam                Exam?               @relation(fields: [examId], references: [id])
+  document            Document?           @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  questionEvaluations QuestionEvaluation[]
+  evaluatedBy         User?               @relation(fields: [evaluatedById], references: [id])
+}</code></pre>
+          </div>
+
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-accent"></span>
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">model QuestionEvaluation</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed overflow-x-auto"><code>model QuestionEvaluation {
+  id                 String  @id @default(cuid())
+  evaluationId       String
+  questionId         String
+  obtainedMarks      Float
+  maxMarks           Float
+  confidence         Float
+  strength           String?
+  mistakes           String?
+  missingConcepts    String?
+  suggestions        String?
+  reasoning          String
+  pageNumbers        String  <span class="text-muted">// comma-separated</span>
+  studentAnswerImage String? <span class="text-muted">// Base64 image data</span>
+  studentAnswer      String? <span class="text-muted">// Extracted text</span>
+
+  evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+  question   Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([evaluationId, questionId])
+}</code></pre>
+          </div>
+
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- API ENDPOINTS -->
+      <section id="api" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">API Endpoints</h2>
+
+        <div class="space-y-4">
+
+          <!-- Evaluation APIs -->
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Evaluation APIs</p>
+            </div>
+            <table>
+              <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><span class="text-xs font-mono font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">POST</span></td><td><code class="text-xs">/api/evaluate</code></td><td class="text-muted">Start evaluation process</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/evaluate/status/{id}</code></td><td class="text-muted">Check evaluation status</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/evaluate/result/{id}</code></td><td class="text-muted">Get evaluation results</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">POST</span></td><td><code class="text-xs">/api/evaluate-single</code></td><td class="text-muted">Quick single-pass evaluation</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/single-status/{id}</code></td><td class="text-muted">Check single-pass status</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">POST</span></td><td><code class="text-xs">/api/evaluate/student</code></td><td class="text-muted">Evaluate with student tracking</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/evaluate/student/history</code></td><td class="text-muted">Student evaluation history</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/evaluate/student/result/{id}</code></td><td class="text-muted">Student result details</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Exam APIs -->
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Exam Management APIs</p>
+            </div>
+            <table>
+              <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/exams/list</code></td><td class="text-muted">List all exams</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">POST</span></td><td><code class="text-xs">/api/exams/create</code></td><td class="text-muted">Create new exam</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/exams/{id}</code></td><td class="text-muted">Get exam details</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-yellow-700 bg-yellow-50 px-1.5 py-0.5 rounded border border-yellow-200">PUT</span></td><td><code class="text-xs">/api/exams/{id}</code></td><td class="text-muted">Update exam</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-red-700 bg-red-50 px-1.5 py-0.5 rounded border border-red-200">DELETE</span></td><td><code class="text-xs">/api/exams/{id}</code></td><td class="text-muted">Delete exam</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Extraction APIs -->
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Extraction APIs</p>
+            </div>
+            <table>
+              <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><span class="text-xs font-mono font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">POST</span></td><td><code class="text-xs">/api/extract-questions</code></td><td class="text-muted">Extract questions from documents</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">POST</span></td><td><code class="text-xs">/api/extract-student-answer</code></td><td class="text-muted">Extract student answers from images</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">POST</span></td><td><code class="text-xs">/api/extract-answer-key</code></td><td class="text-muted">Extract model answers</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Utility APIs -->
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Utility APIs</p>
+            </div>
+            <table>
+              <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/dashboard/stats</code></td><td class="text-muted">Dashboard statistics</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/evaluations</code></td><td class="text-muted">List all evaluations</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/evaluations/{id}/status</code></td><td class="text-muted">Evaluation status</td></tr>
+                <tr><td><span class="text-xs font-mono font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">GET</span></td><td><code class="text-xs">/api/evaluations/{id}/questions</code></td><td class="text-muted">Evaluation questions</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- FRONTEND COMPONENTS -->
+      <section id="components" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Frontend Components</h2>
+
+        <!-- Pages -->
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">14 Page Components</p>
+          </div>
+          <div class="grid sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-rule">
+            <div class="divide-y divide-rule">
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">01</code><div><span class="font-medium">Home</span> <span class="text-muted text-xs ml-1">/</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">02</code><div><span class="font-medium">Dashboard</span> <span class="text-muted text-xs ml-1">/dashboard</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">03</code><div><span class="font-medium">Create Exam</span> <span class="text-muted text-xs ml-1">/exams/create</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">04</code><div><span class="font-medium">Exams List</span> <span class="text-muted text-xs ml-1">/exams</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">05</code><div><span class="font-medium">Exam Details</span> <span class="text-muted text-xs ml-1">/exams/{id}</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">06</code><div><span class="font-medium">Edit Exam</span> <span class="text-muted text-xs ml-1">/exams/{id}/edit</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">07</code><div><span class="font-medium">Evaluate</span> <span class="text-muted text-xs ml-1">/evaluate</span></div></div>
+            </div>
+            <div class="divide-y divide-rule">
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">08</code><div><span class="font-medium">Results</span> <span class="text-muted text-xs ml-1">/results</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">09</code><div><span class="font-medium">Review</span> <span class="text-muted text-xs ml-1">/review</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">10</code><div><span class="font-medium">History</span> <span class="text-muted text-xs ml-1">/history</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">11</code><div><span class="font-medium">Intermediate</span> <span class="text-muted text-xs ml-1">/intermediate</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">12</code><div><span class="font-medium">Graduation</span> <span class="text-muted text-xs ml-1">/graduation</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">13</code><div><span class="font-medium">Post-Graduation</span> <span class="text-muted text-xs ml-1">/post-graduation</span></div></div>
+              <div class="px-5 py-3 flex gap-3 text-sm"><code class="text-xs text-muted w-8 shrink-0">14</code><div><span class="font-medium">Single Pass</span> <span class="text-muted text-xs ml-1">/single</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Component groups -->
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Layout Components</p>
+            <ul class="text-sm space-y-1.5 text-muted">
+              <li><span class="font-medium text-ink">MainLayout</span> — Main application layout</li>
+              <li><span class="font-medium text-ink">Sidebar</span> — Navigation + AI provider selection</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Evaluation Components</p>
+            <ul class="text-sm space-y-1.5 text-muted">
+              <li><span class="font-medium text-ink">EvaluatePage</span> — Main evaluation interface</li>
+              <li><span class="font-medium text-ink">ProgressOverlay</span> — Real-time progress tracking</li>
+              <li><span class="font-medium text-ink">EvaluateSummary</span> — Results summary</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Exam Components</p>
+            <ul class="text-sm space-y-1.5 text-muted">
+              <li><span class="font-medium text-ink">CreateExam</span> — Exam creation form</li>
+              <li><span class="font-medium text-ink">ExamManagement</span> — Exam list & management</li>
+              <li><span class="font-medium text-ink">QuestionManager</span> — Question CRUD</li>
+              <li><span class="font-medium text-ink">ExamUpload</span> — File upload interface</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Results & Review</p>
+            <ul class="text-sm space-y-1.5 text-muted">
+              <li><span class="font-medium text-ink">EvaluationResults</span> — Detailed results display</li>
+              <li><span class="font-medium text-ink">ResultsHistory</span> — Historical results</li>
+              <li><span class="font-medium text-ink">CircularProgressBar</span> — Visual indicators</li>
+              <li><span class="font-medium text-ink">ReviewPage</span> — Evaluation review interface</li>
+              <li><span class="font-medium text-ink">StatsDialog</span> — Statistics modal</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- EDUCATION LEVELS -->
+      <section id="education" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Education Level Support</h2>
+
+        <!-- Subjects -->
+        <div class="space-y-4 mb-8">
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span>📐</span>
+              <p class="font-semibold text-sm">Mathematics</p>
+            </div>
+            <div class="px-5 py-4 grid sm:grid-cols-3 gap-4 text-sm">
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Topics</p><p class="text-muted">Algebra, Geometry, Calculus, Statistics, Trigonometry, Arithmetic</p></div>
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Levels</p><p class="text-muted">Intermediate (11–12), Graduation (B.Sc/B.Tech), Post-Grad (M.Sc/PhD)</p></div>
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Special Features</p><p class="text-muted">Equation recognition, mathematical notation parsing, step-by-step solution evaluation</p></div>
+            </div>
+          </div>
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span>⚡</span>
+              <p class="font-semibold text-sm">Physics</p>
+            </div>
+            <div class="px-5 py-4 grid sm:grid-cols-3 gap-4 text-sm">
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Topics</p><p class="text-muted">Mechanics, Thermodynamics, Electromagnetism, Optics, Modern Physics, Quantum</p></div>
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Levels</p><p class="text-muted">Intermediate (11–12), Graduation (B.Sc/B.Tech), Post-Grad (M.Sc/PhD)</p></div>
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Special Features</p><p class="text-muted">Diagram interpretation, formula recognition, experimental data analysis</p></div>
+            </div>
+          </div>
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span>🧪</span>
+              <p class="font-semibold text-sm">Chemistry</p>
+            </div>
+            <div class="px-5 py-4 grid sm:grid-cols-3 gap-4 text-sm">
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Topics</p><p class="text-muted">Organic, Inorganic, Physical, Analytical Chemistry</p></div>
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Levels</p><p class="text-muted">Intermediate (11–12), Graduation (B.Sc), Post-Grad (M.Sc)</p></div>
+            </div>
+          </div>
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+              <span>💻</span>
+              <p class="font-semibold text-sm">Computer Science</p>
+            </div>
+            <div class="px-5 py-4 grid sm:grid-cols-3 gap-4 text-sm">
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Topics</p><p class="text-muted">Programming, Algorithms, Data Structures, Theory of Computation</p></div>
+              <div><p class="text-xs text-muted font-medium uppercase tracking-wider mb-1">Levels</p><p class="text-muted">Graduation (B.Tech/B.Sc), Post-Grad (M.Tech/M.Sc)</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Level features -->
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-1">Intermediate</p>
+            <p class="text-xs text-muted mb-3">Grades 11–12</p>
+            <ul class="text-sm text-muted space-y-1">
+              <li>Fundamental concepts focus</li>
+              <li>Step-by-step solution eval</li>
+              <li>Problem-solving approach</li>
+            </ul>
+          </div>
+          <div class="border border-accent/20 bg-accentLight rounded-xl p-5">
+            <p class="font-semibold text-sm mb-1">Graduation</p>
+            <p class="text-xs text-muted mb-3">Undergraduate</p>
+            <ul class="text-sm text-muted space-y-1">
+              <li>Advanced concept analysis</li>
+              <li>Theoretical understanding</li>
+              <li>Research & application</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-1">Post-Graduation</p>
+            <p class="text-xs text-muted mb-3">Masters / PhD</p>
+            <ul class="text-sm text-muted space-y-1">
+              <li>Research-level evaluation</li>
+              <li>Critical analysis assessment</li>
+              <li>Innovation & originality</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- SETUP -->
+      <section id="setup" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Setup & Deployment</h2>
+
+        <div class="border border-rule rounded-xl p-5 mb-6">
+          <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Prerequisites</p>
+          <ul class="space-y-1.5 text-sm">
+            <li class="flex gap-2"><span class="text-muted">→</span><span>Node.js <code class="text-xs bg-tag border border-rule px-1.5 py-0.5 rounded">≥ 20.0.0</code></span></li>
+            <li class="flex gap-2"><span class="text-muted">→</span><span>npm <code class="text-xs bg-tag border border-rule px-1.5 py-0.5 rounded">≥ 10.0.0</code></span></li>
+            <li class="flex gap-2"><span class="text-muted">→</span><span>PostgreSQL database</span></li>
+            <li class="flex gap-2"><span class="text-muted">→</span><span>Groq API key and/or Anthropic API key</span></li>
+          </ul>
+        </div>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Environment Variables</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code><span class="text-muted"># Database</span>
+DATABASE_URL="postgresql://user:password@localhost:5432/ai_evaluation"
+
+<span class="text-muted"># AI Services</span>
+GROQ_API_KEY="your_groq_api_key"
+ANTHROPIC_API_KEY="your_anthropic_api_key"
+
+<span class="text-muted"># Optional: Model Overrides</span>
+ANTHROPIC_VISION_MODEL="claude-sonnet-4-6"
+ANTHROPIC_TEXT_MODEL="claude-sonnet-4-6"</code></pre>
+        </div>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Installation Steps</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code><span class="text-muted"># 1. Clone repository</span>
+git clone &lt;repository-url&gt;
+cd ai-evaluation-system
+
+<span class="text-muted"># 2. Install dependencies</span>
+npm install
+
+<span class="text-muted"># 3. Database setup</span>
+npx prisma db push
+npx prisma generate
+
+<span class="text-muted"># 4. Environment configuration</span>
+cp .env.example .env.local
+<span class="text-muted"># Edit .env.local with your credentials</span>
+
+<span class="text-muted"># 5. Start development server</span>
+npm run dev</code></pre>
+        </div>
+
+        <div class="border border-rule rounded-xl overflow-hidden">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Production Deployment</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code><span class="text-muted"># Build</span>
+npm run build
+
+<span class="text-muted"># Start</span>
+npm start
+
+<span class="text-muted"># Database migration</span>
+npx prisma migrate deploy</code></pre>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- TOKEN USAGE & COSTS -->
+      <section id="costs" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Token Usage & Costs</h2>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <table>
+            <thead>
+              <tr>
+                <th>Document Type</th>
+                <th>Pass 1</th>
+                <th>Pass 2</th>
+                <th>Pass 3</th>
+                <th>Feedback</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="font-medium">Image</td><td>4,096</td><td>4,096</td><td>4,096</td><td>1,400</td><td class="font-medium">~13,688</td></tr>
+              <tr><td class="font-medium">PDF (5 questions)</td><td>4,096</td><td>5,120</td><td>7,500</td><td>1,400</td><td class="font-medium">~18,116</td></tr>
+              <tr><td class="font-medium">PDF (10 questions)</td><td>4,096</td><td>10,240</td><td>15,000</td><td>1,400</td><td class="font-medium">~30,736</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">Groq Models</p>
+            <ul class="text-sm space-y-2">
+              <li class="flex justify-between"><span class="text-muted">Text</span><code class="text-xs bg-tag border border-rule px-1.5 py-0.5 rounded">llama-4-scout-17b-16e-instruct</code></li>
+              <li class="flex justify-between"><span class="text-muted">Vision</span><code class="text-xs bg-tag border border-rule px-1.5 py-0.5 rounded">llama-4-scout-17b-16e-instruct</code></li>
+              <li class="pt-2 text-muted text-xs">Use case: Fast, cost-effective evaluation</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">Claude Models</p>
+            <ul class="text-sm space-y-2">
+              <li class="flex justify-between"><span class="text-muted">Text</span><code class="text-xs bg-tag border border-rule px-1.5 py-0.5 rounded">claude-sonnet-4-6</code></li>
+              <li class="flex justify-between"><span class="text-muted">Vision</span><code class="text-xs bg-tag border border-rule px-1.5 py-0.5 rounded">claude-sonnet-4-6</code></li>
+              <li class="pt-2 text-muted text-xs">Use case: Complex handwritten grading, higher accuracy</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border border-winBorder bg-win rounded-xl px-5 py-4">
+          <p class="text-xs font-mono font-medium text-winText uppercase tracking-widest mb-3">Cost Optimization Features</p>
+          <ul class="text-sm text-winText space-y-1">
+            <li><code class="text-xs bg-white border border-winBorder px-1.5 py-0.5 rounded">temperature=0</code> for consistent, deterministic output</li>
+            <li>Retry mechanism limited to network errors only</li>
+            <li>Efficient token usage with structured prompts</li>
+            <li>Fallback mechanisms for failed evaluations</li>
+            <li>Single-pass option for faster, cheaper processing</li>
+          </ul>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- CONFIGURATION -->
+      <section id="config" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Configuration</h2>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">AI Provider Selection</p>
+            <ul class="text-sm space-y-2">
+              <li><span class="font-medium">Groq</span> <span class="text-xs text-muted ml-1">— Best for simple image/vision grading</span></li>
+              <li><span class="font-medium">Claude</span> <span class="text-xs text-muted ml-1">— Best for complex handwritten grading</span></li>
+            </ul>
+            <p class="text-xs text-muted mt-3">Switchable via the sidebar in the UI.</p>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Evaluation Levels</p>
+            <ul class="text-sm space-y-2">
+              <li><span class="font-medium">Beginner</span> <span class="text-xs text-muted ml-1">— More lenient, focus on effort</span></li>
+              <li><span class="font-medium">Intermediate</span> <span class="text-xs text-muted ml-1">— Balanced evaluation</span></li>
+              <li><span class="font-medium">Expert</span> <span class="text-xs text-muted ml-1">— Strict, emphasis on precision</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-4">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Semantic Weight Configuration</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>const SEMANTIC_WEIGHTS = {
+  beginner: {
+    conceptualCoverage: 0.35,
+    grammarCoherence:   0.10,
+    keywordRelevance:   0.25,
+    completeness:       0.20,
+    accuracyScore:      0.10,
+  },
+  intermediate: {
+    conceptualCoverage: 0.30,
+    grammarCoherence:   0.15,
+    keywordRelevance:   0.20,
+    completeness:       0.20,
+    accuracyScore:      0.15,
+  },
+  expert: {
+    conceptualCoverage: 0.25,
+    grammarCoherence:   0.20,
+    keywordRelevance:   0.15,
+    completeness:       0.20,
+    accuracyScore:      0.20,
+  },
+}</code></pre>
+        </div>
+
+        <div class="border border-rule rounded-xl p-5">
+          <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Custom Prompt Templates</p>
+          <p class="text-sm text-muted">Evaluation prompts are customizable per subject. Separate template files for:</p>
+          <ul class="text-sm text-muted mt-2 space-y-1">
+            <li>Mathematics evaluation prompts</li>
+            <li>Physics evaluation prompts</li>
+            <li>Chemistry evaluation prompts</li>
+            <li>Computer Science evaluation prompts</li>
+          </ul>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- SECURITY & PERFORMANCE -->
+      <section id="security" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Security & Performance</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-3">Security Measures</p>
+            <ul class="text-sm text-muted space-y-1.5">
+              <li>Input validation via Zod</li>
+              <li>SQL injection prevention (Prisma)</li>
+              <li>File type + size limits</li>
+              <li>API rate limiting</li>
+              <li>Env variable protection</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-3">Performance Optimizations</p>
+            <ul class="text-sm text-muted space-y-1.5">
+              <li>Lazy loading of components</li>
+              <li>Image optimization (Sharp)</li>
+              <li>Efficient database queries</li>
+              <li>Token usage optimization</li>
+              <li>Caching strategies</li>
+              <li>Progress tracking for long ops</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-3">Error Handling</p>
+            <ul class="text-sm text-muted space-y-1.5">
+              <li>Comprehensive error logging</li>
+              <li>Graceful AI failure degradation</li>
+              <li>User-friendly error messages</li>
+              <li>Retry for network issues</li>
+              <li>Fallback evaluation methods</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- ROADMAP -->
+      <section id="roadmap" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Future Enhancements</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Planned Features</p>
+            <ul class="text-sm text-muted space-y-2">
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Admin Dashboard — complete administrative interface</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Batch Evaluation — process multiple files simultaneously</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Advanced Analytics — detailed performance analytics</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Export Features — PDF/Excel result exports</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Integration APIs — third-party system integration</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Mobile Support — responsive mobile interface</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Real-time Collaboration — multi-user evaluation support</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Technical Improvements</p>
+            <ul class="text-sm text-muted space-y-2">
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>AI Model Fine-tuning — custom model training</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Advanced OCR Integration — hybrid OCR+AI approach</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Performance Monitoring — real-time system metrics</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Automated Testing — comprehensive test suite</li>
+              <li class="flex gap-2"><span class="text-muted shrink-0">☐</span>Documentation Portal — interactive documentation</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- CONCLUSION -->
+      <section class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-4">Conclusion</h2>
+        <p class="text-muted leading-relaxed mb-6">
+          This AI Evaluation System represents a comprehensive solution for automated assessment of handwritten answer scripts. By leveraging advanced vision language models and a sophisticated three-pass evaluation engine, the system provides accurate, fair, and detailed evaluations across multiple subjects and education levels.
+        </p>
+        <p class="text-muted leading-relaxed">
+          The modular architecture allows for easy customization and extension, while the robust technology stack ensures reliability and performance. With features like real-time progress tracking, comprehensive feedback, and dual AI provider support, this system is well-suited for educational institutions seeking to modernize their evaluation processes.
+        </p>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="pt-8 border-t border-rule flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div>
+          <p class="text-sm font-display">AI Evaluation System</p>
+          <p class="text-xs text-muted mt-0.5">Version 0.2.0 · Next.js 16.1.1 · TypeScript · March 2026</p>
+        </div>
+        <p class="text-xs text-muted">Complete Codebase Documentation</p>
+      </footer>
+
+    </main>
+  </div>
+
+</body>
+</html>

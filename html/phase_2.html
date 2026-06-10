@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Evaluation System – Phase 2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-white text-gray-900 font-body antialiased">
+
+  <!-- NAV -->
+  <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-black rounded-xl flex items-center justify-center">
+          <span class="text-white text-xs font-bold font-display">AI</span>
+        </div>
+        <span class="text-lg font-bold font-display tracking-tight">EvalSystem</span>
+        <span class="ml-2 bg-black text-white text-xs font-bold px-2.5 py-0.5 rounded-full">Phase 2</span>
+      </div>
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-500">
+        <a href="#features" class="hover:text-black transition-colors">Features</a>
+        <a href="#timeline" class="hover:text-black transition-colors">Timeline</a>
+        <a href="#metrics" class="hover:text-black transition-colors">Metrics</a>
+        <a href="#investment" class="hover:text-black transition-colors">Investment</a>
+        <a href="#roadmap" class="hover:text-black transition-colors bg-black text-white px-4 py-1.5 rounded-full hover:bg-gray-800">Roadmap</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-24">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 bg-gray-100 text-gray-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
+          <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+          3–6 Month Development Cycle
+        </div>
+        <h1 class="font-display text-6xl md:text-7xl font-extrabold leading-none tracking-tight text-black mb-6">
+          From Evaluation<br/>to Educational<br/><span class="underline decoration-4 underline-offset-4">Intelligence</span>
+        </h1>
+        <p class="text-xl text-gray-500 font-light max-w-2xl mb-10 leading-relaxed">
+          Transform from a basic evaluation tool to an intelligent educational platform that provides predictive insights, personalized learning, and advanced subject evaluation capabilities.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <div class="bg-black text-white px-6 py-3 rounded-2xl font-semibold text-sm">30 Advanced Capabilities</div>
+          <div class="border border-gray-200 text-gray-700 px-6 py-3 rounded-2xl font-semibold text-sm">5 Focus Areas</div>
+          <div class="border border-gray-200 text-gray-700 px-6 py-3 rounded-2xl font-semibold text-sm">15+ Subject Areas</div>
+          <div class="border border-gray-200 text-gray-700 px-6 py-3 rounded-2xl font-semibold text-sm">$1.9M Investment</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="bg-gray-50 border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-16">
+      <h2 class="font-display text-3xl font-bold text-black mb-10">Architecture Evolution</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white border border-gray-200 rounded-2xl p-8">
+          <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Phase 1 — Current</div>
+          <div class="flex flex-wrap items-center gap-2 text-sm font-medium">
+            <span class="bg-gray-100 px-3 py-1.5 rounded-lg">Frontend</span>
+            <span class="text-gray-400">→</span>
+            <span class="bg-gray-100 px-3 py-1.5 rounded-lg">API</span>
+            <span class="text-gray-400">→</span>
+            <span class="bg-gray-100 px-3 py-1.5 rounded-lg">AI Models</span>
+            <span class="text-gray-400">→</span>
+            <span class="bg-gray-100 px-3 py-1.5 rounded-lg">Database</span>
+          </div>
+        </div>
+        <div class="bg-black text-white border border-black rounded-2xl p-8">
+          <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Phase 2 — Enhanced</div>
+          <div class="flex flex-wrap items-center gap-2 text-sm font-medium">
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Frontend</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">API Gateway</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Microservices</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">AI Models</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Analytics Engine</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Database</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Cache</span>
+          </div>
+          <div class="mt-4 pt-4 border-t border-white/10 flex flex-wrap items-center gap-2 text-sm">
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Queue System</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Background Workers</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Model Training</span>
+            <span class="text-gray-500">→</span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg">Data Lake</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div class="mb-14">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">30 Advanced Capabilities</div>
+        <h2 class="font-display text-4xl font-extrabold text-black">Phase 2 Features</h2>
+      </div>
+
+      <!-- Cat 1 -->
+      <div class="mb-16">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-2xl">🧮</span>
+          <h3 class="font-display text-2xl font-bold text-black">Mathematical &amp; Scientific Intelligence</h3>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🧮</span><span class="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 1</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Advanced Mathematical Formula Recognition</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">AI-powered system that reads, understands, and evaluates complex mathematical expressions including equations, integrals, derivatives, and algebraic expressions.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> 90%+ accuracy in STEM evaluation, enabling automated assessment of mathematics, physics, and engineering subjects.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">📊</span><span class="bg-purple-50 text-purple-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 2</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Graph &amp; Diagram Interpretation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Computer vision system that analyzes and evaluates hand-drawn graphs, charts, diagrams, and visual data representations submitted by students.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Unlocks evaluation of economics, statistics, and science subjects requiring visual data representation.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">⚗️</span><span class="bg-green-50 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 3</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Chemical Equation &amp; Formula Validation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Specialized chemistry evaluation engine that reads chemical formulas, balances equations, and assesses understanding of chemical reactions and stoichiometry.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Comprehensive evaluation from basic formulas to complex organic chemistry reactions.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">📐</span><span class="bg-yellow-50 text-yellow-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 4</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Geometric Shape &amp; Proof Analysis</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Advanced geometry evaluation system identifying constructions, analyzing proofs, and assessing spatial reasoning with logical theorem validation.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Enables evaluation of geometry, trigonometry, and spatial reasoning subjects.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🔬</span><span class="bg-red-50 text-red-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 5</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Physics Problem Solving Evaluation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Physics-specific evaluation assessing problem-solving methodology, formula application, and conceptual understanding from basic mechanics to quantum concepts.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Comprehensive physics education evaluation across all complexity levels.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🧬</span><span class="bg-teal-50 text-teal-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 6</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Biology Diagram &amp; Process Evaluation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Biology-focused evaluation analyzing biological diagrams, processes, and conceptual understanding from cellular biology to ecosystem dynamics.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Enables evaluation of complex biological processes across all levels.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cat 2 -->
+      <div class="mb-16">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-2xl">🧠</span>
+          <h3 class="font-display text-2xl font-bold text-black">Advanced Analytics &amp; Intelligence</h3>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🧠</span><span class="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 7</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Predictive Performance Analytics</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">ML system analyzing historical data to predict future student performance and identify at-risk students before they fall behind using regression and time series models.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Early intervention for struggling students, improving overall success rates.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">📈</span><span class="bg-purple-50 text-purple-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 8</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Learning Gap Analysis Engine</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Intelligent system identifying specific knowledge gaps and learning deficiencies for individuals and entire classes, mapping them to specific learning objectives.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Personalized learning paths targeting specific weaknesses.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🔍</span><span class="bg-green-50 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 9</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Class-wide Pattern Recognition</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Analytics system identifying common mistakes, learning patterns, and misconceptions across entire classes using clustering algorithms.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Curriculum optimization via data-driven learning insights.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">💡</span><span class="bg-yellow-50 text-yellow-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 10</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Intelligent Question Difficulty Assessment</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">AI system automatically analyzing and classifying question difficulty based on cognitive complexity and historical student performance data.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Better assessment design and balanced exam creation.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">📊</span><span class="bg-red-50 text-red-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 11</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Concept Mastery Tracking</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">System tracking individual student mastery of specific concepts over time, providing detailed learning progress maps and targeted improvement recommendations.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Personalized experiences with clear progress tracking.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🎯</span><span class="bg-teal-50 text-teal-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 12</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Adaptive Testing Engine</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Intelligent testing using Item Response Theory and Bayesian algorithms to adjust question difficulty in real-time based on student performance.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> More accurate assessment with fewer questions.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">📉</span><span class="bg-orange-50 text-orange-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 13</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Performance Trend Analysis</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Advanced analytics identifying performance trends, seasonal patterns, and long-term trajectories using time series and moving average algorithms.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Strategic educational planning with early issue identification.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🔢</span><span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 14</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Statistical Confidence Scoring</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">System providing statistical confidence intervals for all evaluation scores, indicating measurement reliability with full uncertainty quantification.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> More reliable score interpretation with clear measurement precision.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cat 3 -->
+      <div class="mb-16">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-2xl">🎯</span>
+          <h3 class="font-display text-2xl font-bold text-black">AI Model Enhancement</h3>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🎯</span><span class="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 15</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Custom Model Fine-Tuning Platform</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Platform allowing institutions to train custom AI models using transfer learning to improve evaluation accuracy for their specific subjects and curricula.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> 15–20% accuracy improvement for specialized subjects.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🔄</span><span class="bg-purple-50 text-purple-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 16</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Continuous Learning System</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">AI models that automatically improve based on human feedback and new evaluation data, creating a self-improving platform without manual intervention.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Accuracy improves continuously over time.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🌐</span><span class="bg-green-50 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 17</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Multi-Model Ensemble System</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Advanced system combining multiple specialized AI models using weighted voting for optimal accuracy across handwriting, semantics, and mathematics.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> 5–10% accuracy improvement through model diversity.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🧪</span><span class="bg-yellow-50 text-yellow-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 18</span></div>
+            <h4 class="font-display font-bold text-black mb-2">A/B Testing Framework for Models</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Scientific testing platform for controlled experiments with different AI models, using statistical analysis to determine superior evaluation strategies.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Data-driven model improvement with quantified gains.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🔬</span><span class="bg-red-50 text-red-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 19</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Bias Detection &amp; Mitigation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Advanced system monitoring and identifying potential biases across different demographic groups with statistical disparity analysis and mitigation strategies.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Fair and equitable evaluation for all students.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🧩</span><span class="bg-teal-50 text-teal-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 20</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Domain-Specific Model Specialization</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Specialized AI models trained for specific domains like mathematics, literature, history, and sciences with dedicated architectures and knowledge bases.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Expert-level evaluation in each subject area.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200 md:col-start-1 lg:col-start-2">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🎭</span><span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 21</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Contextual Understanding Enhancement</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">AI models with enhanced ability to understand context, nuance, and implicit meaning in student responses beyond surface-level content matching.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Sophisticated evaluation assessing true understanding.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cat 4 -->
+      <div class="mb-16">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-2xl">📚</span>
+          <h3 class="font-display text-2xl font-bold text-black">Advanced Subject Evaluation</h3>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">📚</span><span class="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 22</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Literature &amp; Essay Analysis Enhancement</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Advanced evaluation of literary analysis, creative writing, and complex essays with understanding of themes, style, and literary devices via specialized NLP models.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Comprehensive humanities evaluation with subjective analysis.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🗺️</span><span class="bg-purple-50 text-purple-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 23</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Historical Analysis &amp; Critical Thinking Evaluation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Evaluates historical understanding, chronological reasoning, and critical thinking including source analysis and cause-effect relationships in social sciences.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Advanced social sciences evaluation with analytical depth.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">💼</span><span class="bg-green-50 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 24</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Business Case Study Evaluation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Specialized system evaluating business case studies, strategic analysis, and management decision-making with financial analysis and strategic thinking assessment.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Professional evaluation for business schools and management programs.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🎨</span><span class="bg-yellow-50 text-yellow-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 25</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Art &amp; Design Assessment System</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">System evaluating artistic compositions, design principles, and creative visual responses using computer vision for color theory, composition, and creative elements.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Expansion into creative subjects with visual aesthetic evaluation.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🗣️</span><span class="bg-red-50 text-red-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 26</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Language Proficiency &amp; Communication Skills</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Advanced evaluation of language proficiency assessing grammar, vocabulary, coherence, and fluency across multiple languages for written responses.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Comprehensive language education with detailed development feedback.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🌍</span><span class="bg-teal-50 text-teal-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 27</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Cultural Studies &amp; Social Science Evaluation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Evaluates understanding of cultural concepts, social dynamics, and interdisciplinary social science topics requiring cultural sensitivity and awareness.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Evaluation requiring cultural sensitivity and interdisciplinary thinking.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cat 5 -->
+      <div>
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-2xl">⚡</span>
+          <h3 class="font-display text-2xl font-bold text-black">Advanced Evaluation Features</h3>
+        </div>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">⚡</span><span class="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 28</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Real-Time Collaborative Evaluation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Multiple evaluators collaborate in real-time on complex evaluations, combining human expertise with AI assistance, comments, and consistency checks.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Improved quality through human-AI collaboration.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🔄</span><span class="bg-purple-50 text-purple-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 29</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Longitudinal Progress Tracking</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Advanced system tracking student progress over extended periods with multi-year history, identifying developmental patterns and strategic intervention points.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Strategic long-term perspective on student development.</div>
+          </div>
+          <div class="border border-gray-200 rounded-2xl p-6 hover:border-black hover:shadow-lg transition-all duration-200">
+            <div class="flex items-start justify-between mb-4"><span class="text-xl">🎯</span><span class="bg-green-50 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">Feature 30</span></div>
+            <h4 class="font-display font-bold text-black mb-2">Personalized Feedback Generation</h4>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">AI system generating detailed, personalized feedback identifying strengths, weaknesses, and specific improvement strategies using advanced natural language generation.</p>
+            <div class="bg-gray-50 rounded-xl p-3 text-xs text-gray-500"><span class="font-semibold text-gray-700">Impact:</span> Actionable, personalized guidance for student improvement.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline" class="bg-gray-50 border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div class="mb-14">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">6-Month Execution Plan</div>
+        <h2 class="font-display text-4xl font-extrabold text-black">Technical Implementation</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+          <div class="bg-black text-white px-6 py-4">
+            <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Month 1–2</div>
+            <h3 class="font-display text-xl font-bold">Foundation &amp; Core Intelligence</h3>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W1–2</span><span class="text-gray-700">Mathematical formula recognition engine</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W3–4</span><span class="text-gray-700">Graph and diagram interpretation</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W5–6</span><span class="text-gray-700">Physics and chemistry evaluation systems</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W7–8</span><span class="text-gray-700">Advanced analytics infrastructure</span></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+          <div class="bg-gray-800 text-white px-6 py-4">
+            <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Month 3–4</div>
+            <h3 class="font-display text-xl font-bold">Analytics &amp; Subject Expansion</h3>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W9–10</span><span class="text-gray-700">Predictive analytics and learning gap analysis</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W11–12</span><span class="text-gray-700">Literature and historical analysis systems</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W13–14</span><span class="text-gray-700">Business case study and language evaluation</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W15–16</span><span class="text-gray-700">Biology and cultural studies evaluation</span></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+          <div class="bg-gray-600 text-white px-6 py-4">
+            <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Month 5–6</div>
+            <h3 class="font-display text-xl font-bold">AI Enhancement &amp; Polish</h3>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W17–18</span><span class="text-gray-700">Custom model training and continuous learning</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W19–20</span><span class="text-gray-700">Multi-model ensemble and bias detection</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W21–22</span><span class="text-gray-700">Real-time collaboration and longitudinal tracking</span></div>
+            <div class="h-px bg-gray-100"></div>
+            <div class="flex items-start gap-3 text-sm"><span class="text-gray-300 font-mono text-xs mt-0.5 w-10 flex-shrink-0">W23–24</span><span class="text-gray-700">Performance optimization and testing</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METRICS -->
+  <section id="metrics" class="bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div class="mb-14">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Success KPIs</div>
+        <h2 class="font-display text-4xl font-extrabold text-black">Phase 2 Metrics</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="font-display text-lg font-bold text-black mb-6 pb-3 border-b border-gray-100">Technical Metrics</h3>
+          <div class="space-y-5">
+            <div>
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-600">Mathematical Accuracy</span><span class="font-bold text-black">&gt;90%</span></div>
+              <div class="h-1.5 bg-gray-100 rounded-full"><div class="h-full bg-black rounded-full w-11/12"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-600">AI Model Accuracy</span><span class="font-bold text-black">&gt;95%</span></div>
+              <div class="h-1.5 bg-gray-100 rounded-full"><div class="h-full bg-black rounded-full" style="width:95%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2"><span class="text-gray-600">System Availability</span><span class="font-bold text-black">&gt;99.9%</span></div>
+              <div class="h-1.5 bg-gray-100 rounded-full"><div class="h-full bg-black rounded-full w-full"></div></div>
+            </div>
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl text-sm">
+              <span class="text-gray-600">Evaluation Performance</span><span class="font-bold text-black">&lt;3s processing</span>
+            </div>
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl text-sm">
+              <span class="text-gray-600">Analytics Capacity</span><span class="font-bold text-black">10,000+ evals/hr</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-display text-lg font-bold text-black mb-6 pb-3 border-b border-gray-100">Business Metrics</h3>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+              <div class="w-10 h-10 bg-black rounded-xl flex items-center justify-center flex-shrink-0"><span class="text-white text-xs font-bold">200%</span></div>
+              <div><div class="text-xs text-gray-400 uppercase tracking-wide">User Adoption</div><div class="font-semibold text-black text-sm">Increase in active users</div></div>
+            </div>
+            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+              <div class="w-10 h-10 bg-black rounded-xl flex items-center justify-center flex-shrink-0"><span class="text-white text-xs font-bold">500%</span></div>
+              <div><div class="text-xs text-gray-400 uppercase tracking-wide">Evaluation Volume</div><div class="font-semibold text-black text-sm">Increase in processed evals</div></div>
+            </div>
+            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+              <div class="w-10 h-10 bg-black rounded-xl flex items-center justify-center flex-shrink-0"><span class="text-white text-xs font-bold">300%</span></div>
+              <div><div class="text-xs text-gray-400 uppercase tracking-wide">Revenue Growth</div><div class="font-semibold text-black text-sm">Increase in ARR</div></div>
+            </div>
+            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+              <div class="w-10 h-10 bg-black rounded-xl flex items-center justify-center flex-shrink-0"><span class="text-white text-xs font-bold">95%</span></div>
+              <div><div class="text-xs text-gray-400 uppercase tracking-wide">Satisfaction Score</div><div class="font-semibold text-black text-sm">Customer satisfaction</div></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-display text-lg font-bold text-black mb-6 pb-3 border-b border-gray-100">Educational Impact</h3>
+          <div class="space-y-4">
+            <div class="border border-gray-200 rounded-xl p-4"><div class="text-3xl font-display font-extrabold text-black mb-1">15%</div><div class="text-sm text-gray-500">Improvement in student learning outcomes</div></div>
+            <div class="border border-gray-200 rounded-xl p-4"><div class="text-3xl font-display font-extrabold text-black mb-1">80%</div><div class="text-sm text-gray-500">Reduction in teacher grading time</div></div>
+            <div class="border border-gray-200 rounded-xl p-4"><div class="text-3xl font-display font-extrabold text-black mb-1">60%</div><div class="text-sm text-gray-500">Faster identification of learning gaps</div></div>
+            <div class="border border-gray-200 rounded-xl p-4"><div class="text-3xl font-display font-extrabold text-black mb-1">400%</div><div class="text-sm text-gray-500">ROI for institutions adopting the platform</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVESTMENT -->
+  <section id="investment" class="bg-gray-50 border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div class="mb-14">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Financial Overview</div>
+        <h2 class="font-display text-4xl font-extrabold text-black">Investment &amp; ROI</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white border border-gray-200 rounded-2xl p-8">
+          <h3 class="font-display text-xl font-bold text-black mb-6">Development Investment</h3>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <div><div class="font-medium text-black text-sm">Engineering Team</div><div class="text-xs text-gray-400">6 engineers × 6 months</div></div>
+              <span class="font-bold text-black">$900K</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <div><div class="font-medium text-black text-sm">AI Research</div><div class="text-xs text-gray-400">3 researchers × 6 months</div></div>
+              <span class="font-bold text-black">$450K</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <div><div class="font-medium text-black text-sm">Subject Matter Experts</div><div class="text-xs text-gray-400">5 experts × 6 months</div></div>
+              <span class="font-bold text-black">$300K</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <div><div class="font-medium text-black text-sm">Infrastructure &amp; Tools</div><div class="text-xs text-gray-400">Cloud, datasets &amp; software</div></div>
+              <span class="font-bold text-black">$250K</span>
+            </div>
+            <div class="flex justify-between items-center pt-2">
+              <span class="font-display font-extrabold text-black text-lg">Total Investment</span>
+              <span class="font-display font-extrabold text-black text-2xl">$1.9M</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-black text-white rounded-2xl p-8">
+          <h3 class="font-display text-xl font-bold mb-6">Expected ROI</h3>
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between items-end mb-2">
+                <div><div class="text-gray-400 text-xs uppercase tracking-widest">Year 1 Revenue</div><div class="font-display font-extrabold text-3xl">$4.5M</div></div>
+                <span class="bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full">237% ROI</span>
+              </div>
+              <div class="h-1.5 bg-white/10 rounded-full"><div class="h-full bg-white rounded-full" style="width:35%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between items-end mb-2">
+                <div><div class="text-gray-400 text-xs uppercase tracking-widest">Year 2 Revenue</div><div class="font-display font-extrabold text-3xl">$12M</div></div>
+                <span class="bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full">632% ROI</span>
+              </div>
+              <div class="h-1.5 bg-white/10 rounded-full"><div class="h-full bg-white rounded-full" style="width:60%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between items-end mb-2">
+                <div><div class="text-gray-400 text-xs uppercase tracking-widest">Year 3 Revenue</div><div class="font-display font-extrabold text-3xl">$25M</div></div>
+                <span class="bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full">1316% ROI</span>
+              </div>
+              <div class="h-1.5 bg-white/10 rounded-full"><div class="h-full bg-white rounded-full w-full"></div></div>
+            </div>
+            <div class="pt-4 border-t border-white/10 grid grid-cols-2 gap-4">
+              <div class="bg-white/5 rounded-xl p-3 text-center"><div class="text-2xl font-display font-extrabold">35%</div><div class="text-xs text-gray-400 mt-1">Market share capture</div></div>
+              <div class="bg-white/5 rounded-xl p-3 text-center"><div class="text-2xl font-display font-extrabold">5M+</div><div class="text-xs text-gray-400 mt-1">Students reached</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="roadmap" class="bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div class="mb-14">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Release Plan</div>
+        <h2 class="font-display text-4xl font-extrabold text-black">Phase 2 Rollout Strategy</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="border-2 border-black rounded-2xl p-8">
+          <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Phase 2.1</div>
+          <div class="font-display text-xl font-extrabold text-black mb-1">Foundation Release</div>
+          <div class="text-sm text-gray-400 mb-6">Month 2</div>
+          <ul class="space-y-3 text-sm text-gray-600">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-black rounded-full flex-shrink-0"></span>Mathematical formula recognition</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-black rounded-full flex-shrink-0"></span>Graph and diagram interpretation</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-black rounded-full flex-shrink-0"></span>Advanced analytics dashboard</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-black rounded-full flex-shrink-0"></span>Physics and chemistry evaluation</li>
+          </ul>
+        </div>
+        <div class="border border-gray-200 rounded-2xl p-8">
+          <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Phase 2.2</div>
+          <div class="font-display text-xl font-extrabold text-black mb-1">Intelligence Expansion</div>
+          <div class="text-sm text-gray-400 mb-6">Month 4</div>
+          <ul class="space-y-3 text-sm text-gray-600">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span>Predictive analytics &amp; learning gap analysis</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span>Literature and historical analysis</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span>Business case study evaluation</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span>Biology and cultural studies</li>
+          </ul>
+        </div>
+        <div class="border border-gray-200 rounded-2xl p-8">
+          <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Phase 2.3</div>
+          <div class="font-display text-xl font-extrabold text-black mb-1">AI Excellence Launch</div>
+          <div class="text-sm text-gray-400 mb-6">Month 6</div>
+          <ul class="space-y-3 text-sm text-gray-600">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span>Custom model training &amp; continuous learning</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span>Multi-model ensemble system</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span>Real-time collaboration features</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span>Personalized feedback generation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPETITIVE ADVANTAGES -->
+  <section class="bg-gray-50 border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div class="mb-14">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Market Position</div>
+        <h2 class="font-display text-4xl font-extrabold text-black">Competitive Advantages</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="font-display text-lg font-bold text-black mb-5">Technical Superiority</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">🧮</span><div><div class="font-semibold text-black text-sm">Mathematical Intelligence</div><div class="text-gray-500 text-xs mt-0.5">Only system with advanced math evaluation across all STEM subjects</div></div></div>
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">📚</span><div><div class="font-semibold text-black text-sm">Multi-Subject Coverage</div><div class="text-gray-500 text-xs mt-0.5">Comprehensive evaluation from sciences to humanities</div></div></div>
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">📈</span><div><div class="font-semibold text-black text-sm">Predictive Analytics</div><div class="text-gray-500 text-xs mt-0.5">AI-powered performance prediction and learning gap analysis</div></div></div>
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">🔄</span><div><div class="font-semibold text-black text-sm">Advanced AI Models</div><div class="text-gray-500 text-xs mt-0.5">Continuous learning and custom model fine-tuning capabilities</div></div></div>
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">⚡</span><div><div class="font-semibold text-black text-sm">Real-Time Collaboration</div><div class="text-gray-500 text-xs mt-0.5">Human-AI collaborative evaluation with instant feedback</div></div></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-display text-lg font-bold text-black mb-5">Innovation Highlights</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">🌱</span><div><div class="font-semibold text-black text-sm">Continuous Learning</div><div class="text-gray-500 text-xs mt-0.5">Models that improve from every evaluation and feedback loop</div></div></div>
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">👁️</span><div><div class="font-semibold text-black text-sm">Multi-Modal AI</div><div class="text-gray-500 text-xs mt-0.5">Vision, text, mathematical, and contextual understanding combined</div></div></div>
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">⚡</span><div><div class="font-semibold text-black text-sm">Real-Time Intelligence</div><div class="text-gray-500 text-xs mt-0.5">Live analytics and insights generated during evaluation</div></div></div>
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">🎓</span><div><div class="font-semibold text-black text-sm">Domain Specialization</div><div class="text-gray-500 text-xs mt-0.5">Expert-level evaluation capabilities across 15+ subject areas</div></div></div>
+            <div class="flex items-start gap-3 p-4 bg-white border border-gray-200 rounded-xl"><span class="text-lg">🎯</span><div><div class="font-semibold text-black text-sm">Personalized Feedback</div><div class="text-gray-500 text-xs mt-0.5">AI-generated detailed feedback for each student's growth</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-black text-white">
+    <div class="max-w-7xl mx-auto px-6 py-20 text-center">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">Phase 2 Vision</div>
+        <h2 class="font-display text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
+          "From evaluating answers to<br/>inspiring learning."
+        </h2>
+        <p class="text-gray-400 text-lg mb-10 leading-relaxed">
+          Phase 2 positions you as the undisputed leader in AI-powered educational assessment — the most intelligent, comprehensive, insightful, adaptive, and collaborative evaluation platform in the world.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <div class="bg-white text-black px-6 py-3 rounded-2xl font-bold text-sm">🧠 Most Intelligent</div>
+          <div class="bg-white/10 text-white px-6 py-3 rounded-2xl font-bold text-sm">📚 Most Comprehensive</div>
+          <div class="bg-white/10 text-white px-6 py-3 rounded-2xl font-bold text-sm">📊 Most Insightful</div>
+          <div class="bg-white/10 text-white px-6 py-3 rounded-2xl font-bold text-sm">🔄 Most Adaptive</div>
+          <div class="bg-white/10 text-white px-6 py-3 rounded-2xl font-bold text-sm">🤝 Most Collaborative</div>
+        </div>
+        <div class="mt-16 pt-8 border-t border-white/10 text-gray-600 text-xs">
+          AI Evaluation System · Phase 2 · Ready for Phase 3 Global Expansion
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

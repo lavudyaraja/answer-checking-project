@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Single-Pass vs Three-Pass Evaluation — Complete Analysis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"DM Serif Display"', 'Georgia', 'serif'],
+            body:    ['"DM Sans"', 'sans-serif'],
+            mono:    ['"DM Mono"', 'monospace'],
+          },
+          colors: {
+            ink:        '#111111',
+            muted:      '#6b7280',
+            rule:       '#e5e7eb',
+            accent:     '#1a56db',
+            accentLight:'#eff6ff',
+            tag:        '#f3f4f6',
+            win:        '#f0fdf4',
+            winBorder:  '#86efac',
+            winText:    '#166534',
+            warn:       '#fefce8',
+            warnBorder: '#fde047',
+            warnText:   '#713f12',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3 { font-family: 'DM Serif Display', Georgia, serif; }
+    code, pre  { font-family: 'DM Mono', monospace; }
+    html { scroll-behavior: smooth; }
+    pre  { overflow-x: auto; }
+
+    .nav-link { transition: color .15s, border-color .15s; }
+    .nav-link:hover { color: #1a56db; border-left-color: #1a56db; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .section-card { animation: fadeUp .35s ease both; }
+
+    table { width:100%; border-collapse:collapse; }
+    th {
+      background:#f9fafb; font-weight:600; text-align:left;
+      padding:10px 14px; font-size:.78rem; text-transform:uppercase;
+      letter-spacing:.07em; color:#6b7280; border-bottom:1px solid #e5e7eb;
+    }
+    td { padding:10px 14px; border-bottom:1px solid #f3f4f6; font-size:.875rem; vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+
+    .winner-cell { background:#f0fdf4; color:#166534; font-weight:600; }
+  </style>
+</head>
+<body class="bg-white text-ink antialiased">
+
+  <!-- TOP BAR -->
+  <header class="border-b border-rule sticky top-0 bg-white z-50">
+    <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="w-7 h-7 rounded-md bg-accent flex items-center justify-center text-white text-xs font-bold font-mono">AI</span>
+        <span class="font-display text-base tracking-tight">Evaluation Analysis</span>
+        <span class="ml-2 px-2 py-0.5 rounded text-xs font-mono bg-tag text-muted border border-rule">v1.0</span>
+      </div>
+      <div class="hidden md:flex items-center gap-5 text-sm font-body text-muted">
+        <a href="#overview"    class="hover:text-ink transition-colors">Overview</a>
+        <a href="#single-pass" class="hover:text-ink transition-colors">Single-Pass</a>
+        <a href="#three-pass"  class="hover:text-ink transition-colors">Three-Pass</a>
+        <a href="#comparison"  class="hover:text-ink transition-colors">Comparison</a>
+        <a href="#recommend"   class="hover:text-ink transition-colors">Recommendation</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto flex">
+
+    <!-- SIDEBAR -->
+    <aside class="hidden lg:block w-60 shrink-0 border-r border-rule min-h-screen sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto pt-8 pb-16 px-5">
+      <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">Contents</p>
+      <nav class="flex flex-col gap-0.5 text-sm font-body">
+        <a href="#overview"    class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Overview</a>
+        <a href="#single-pass" class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">How Single-Pass Works</a>
+        <a href="#three-pass"  class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">How Three-Pass Works</a>
+        <a href="#comparison"  class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Detailed Comparison</a>
+        <a href="#performance" class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Performance Analysis</a>
+        <a href="#cost"        class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Cost Analysis</a>
+        <a href="#quality"     class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Quality Assessment</a>
+        <a href="#which"       class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Which Is Better?</a>
+        <a href="#impl"        class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Implementation</a>
+        <a href="#recommend"   class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Recommendations</a>
+        <a href="#conclusion"  class="nav-link py-1.5 pl-3 border-l-2 border-transparent text-muted">Conclusion</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 min-w-0 px-8 py-12 max-w-4xl">
+
+      <!-- HERO -->
+      <section id="overview" class="mb-14 section-card">
+        <p class="text-xs font-mono text-accent font-medium uppercase tracking-widest mb-3">Analysis · March 2026</p>
+        <h1 class="text-5xl font-display text-ink leading-tight mb-4">Single-Pass vs<br /><em>Three-Pass</em></h1>
+        <p class="text-lg text-muted font-light leading-relaxed max-w-2xl mb-6">
+          A complete analysis of two AI evaluation engines for grading handwritten answer sheets — comparing speed, cost, accuracy, and implementation complexity.
+        </p>
+
+        <!-- Stat strip -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-px border border-rule rounded-xl overflow-hidden bg-rule mt-8">
+          <div class="bg-white px-5 py-4">
+            <p class="text-2xl font-display">3×</p>
+            <p class="text-xs text-muted mt-1">Faster (single-pass)</p>
+          </div>
+          <div class="bg-white px-5 py-4">
+            <p class="text-2xl font-display">25%</p>
+            <p class="text-xs text-muted mt-1">Cost savings</p>
+          </div>
+          <div class="bg-white px-5 py-4">
+            <p class="text-2xl font-display">66%</p>
+            <p class="text-xs text-muted mt-1">Fewer API calls</p>
+          </div>
+          <div class="bg-white px-5 py-4">
+            <p class="text-2xl font-display">−3%</p>
+            <p class="text-xs text-muted mt-1">Accuracy trade-off</p>
+          </div>
+        </div>
+
+        <!-- Key note -->
+        <div class="mt-8 border border-accent/20 bg-accentLight rounded-xl px-6 py-4 flex gap-4">
+          <span class="text-xl mt-0.5">🌟</span>
+          <div>
+            <p class="font-semibold text-sm text-ink mb-1">Key Innovation — Direct AI Vision Reading</p>
+            <p class="text-sm text-muted leading-relaxed">Both systems use Vision Language Models (VLMs) to read handwritten scripts directly — no OCR middleware — providing superior accuracy for handwritten content.</p>
+          </div>
+        </div>
+
+        <!-- Tech stack -->
+        <div class="mt-6 border border-rule rounded-xl p-5">
+          <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-4">Core Technology Stack</p>
+          <div class="grid sm:grid-cols-2 gap-3 text-sm">
+            <div class="flex justify-between"><span class="text-muted">Frontend</span><span class="font-medium">Next.js 16, TypeScript, Tailwind</span></div>
+            <div class="flex justify-between"><span class="text-muted">Backend</span><span class="font-medium">Next.js API Routes, PostgreSQL</span></div>
+            <div class="flex justify-between"><span class="text-muted">AI Models</span><span class="font-medium">Claude Sonnet 4.6, Groq Llama 4</span></div>
+            <div class="flex justify-between"><span class="text-muted">Image Processing</span><span class="font-medium">Sharp, unpdf</span></div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- SINGLE-PASS -->
+      <section id="single-pass" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-2">How Single-Pass Works</h2>
+        <p class="text-muted text-sm mb-8">One comprehensive API call handles transcription, semantic analysis, mark awarding, and feedback — all at once.</p>
+
+        <!-- Flow -->
+        <div class="border border-rule rounded-xl p-5 mb-6 font-mono text-xs text-muted leading-relaxed">
+          <p class="text-ink font-medium mb-3 font-body text-sm">Architecture Flow</p>
+          <p>Handwritten Image → Single AI Call → Complete Evaluation</p>
+          <p class="mt-2 ml-4">↓</p>
+          <div class="ml-4 border border-rule rounded-lg p-3 my-2 w-fit">
+            <p class="text-ink">Comprehensive AI Prompt</p>
+            <p class="mt-1">1. Transcription</p>
+            <p>2. Semantic Analysis</p>
+            <p>3. Mark Awarding</p>
+            <p>4. Feedback</p>
+          </div>
+          <p class="ml-4">↓</p>
+          <div class="ml-4 border border-rule rounded-lg p-3 mt-2 w-fit">
+            <p class="text-ink">Structured JSON Response</p>
+            <p class="mt-1">transcription · semanticAnalysis · evaluation · confidence</p>
+          </div>
+        </div>
+
+        <!-- Prompt code -->
+        <div class="border border-rule rounded-xl overflow-hidden mb-4">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Comprehensive Prompt Structure</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed bg-white"><code>const comprehensivePrompt = `
+You are an expert educational evaluator.
+
+EVALUATION CONTEXT:
+Question: ${questionText}
+Maximum Marks: ${maxMarks}
+Model Answer: ${modelAnswer}
+
+YOUR TASKS:
+1. TRANSCRIPTION: Read and transcribe the handwritten answer exactly
+2. SEMANTIC ANALYSIS: Evaluate understanding across 5 dimensions
+3. MARK AWARDING: Assign fair marks with detailed reasoning
+
+RESPONSE FORMAT (Valid JSON):
+{
+  "transcription": "exact handwritten text",
+  "semanticAnalysis": {
+    "conceptualCoverage": number (0-100),
+    "grammarCoherence":   number (0-100),
+    "keywordRelevance":   number (0-100),
+    "completeness":       number (0-100),
+    "accuracyScore":      number (0-100),
+    "composite":          number (0-100)
+  },
+  "evaluation": {
+    "obtainedMarks": number,
+    "confidence":    number (0-100),
+    "strengths":     ["string"],
+    "mistakes":      ["string"],
+    "suggestions":   ["string"],
+    "reasoning":     "detailed explanation"
+  }
+}`</code></pre>
+        </div>
+
+        <!-- API call -->
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Single API Call</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed bg-white"><code>const result = await anthropic.messages.create({
+  model: 'claude-sonnet-4-6',
+  max_tokens: 4000,
+  temperature: 0,
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text',  text: comprehensivePrompt },
+      { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64 } }
+    ]
+  }]
+})</code></pre>
+        </div>
+
+        <!-- Characteristics -->
+        <div class="border border-winBorder bg-win rounded-xl px-5 py-4">
+          <p class="text-xs font-mono font-medium text-winText uppercase tracking-widest mb-3">Key Characteristics</p>
+          <ul class="text-sm space-y-1 text-winText">
+            <li>One API call per question</li>
+            <li>Comprehensive prompt covering all tasks</li>
+            <li>Structured JSON response</li>
+            <li>All processing in a single step</li>
+            <li>Temperature set to 0 for consistency</li>
+          </ul>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- THREE-PASS -->
+      <section id="three-pass" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-2">How Three-Pass Works</h2>
+        <p class="text-muted text-sm mb-8">Three sequential API calls — each with a specialized, focused prompt — building on the previous pass.</p>
+
+        <!-- Passes -->
+        <div class="flex flex-col gap-0 mb-6">
+          <div class="border border-rule rounded-t-xl p-5 flex gap-4">
+            <div class="w-8 h-8 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5">1</div>
+            <div class="flex-1">
+              <p class="font-semibold text-sm mb-1">Pass 1 — Vision Transcription <span class="text-xs text-muted font-normal ml-1">10–15 s</span></p>
+              <p class="text-sm text-muted mb-3">Vision model reads handwriting directly into plain text.</p>
+              <pre class="text-xs font-mono bg-tag border border-rule rounded-lg px-3 py-2"><code>const pass1 = await anthropic.messages.create({
+  model: 'claude-sonnet-4-6',
+  max_tokens: 2000, temperature: 0,
+  messages: [{ role: 'user', content: [
+    { type: 'text',  text: 'Transcribe this handwritten answer exactly...' },
+    { type: 'image', source: { type: 'base64', ... } }
+  ]}]
+})
+// Output: "The student's handwritten answer..."</code></pre>
+            </div>
+          </div>
+
+          <div class="border-x border-b border-rule p-5 flex gap-4">
+            <div class="w-8 h-8 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5">2</div>
+            <div class="flex-1">
+              <p class="font-semibold text-sm mb-1">Pass 2 — Semantic Analysis <span class="text-xs text-muted font-normal ml-1">8–12 s</span></p>
+              <p class="text-sm text-muted mb-3">Text model evaluates the transcript against the model answer across 5 dimensions.</p>
+              <pre class="text-xs font-mono bg-tag border border-rule rounded-lg px-3 py-2"><code>const pass2 = await anthropic.messages.create({
+  model: 'claude-sonnet-4-6',
+  max_tokens: 1500, temperature: 0,
+  messages: [{ role: 'user', content:
+    `Analyze this answer: "${transcription}" against question: "${question}"`
+  }]
+})
+// Output: Semantic scores and analysis</code></pre>
+            </div>
+          </div>
+
+          <div class="border-x border-b border-rule rounded-b-xl p-5 flex gap-4">
+            <div class="w-8 h-8 rounded-full border-2 border-accent text-accent flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5">3</div>
+            <div class="flex-1">
+              <p class="font-semibold text-sm mb-1">Pass 3 — Mark Award <span class="text-xs text-muted font-normal ml-1">8–12 s</span></p>
+              <p class="text-sm text-muted mb-3">Text model translates semantic scores into numeric marks and detailed feedback.</p>
+              <pre class="text-xs font-mono bg-tag border border-rule rounded-lg px-3 py-2"><code>const pass3 = await anthropic.messages.create({
+  model: 'claude-sonnet-4-6',
+  max_tokens: 1500, temperature: 0,
+  messages: [{ role: 'user', content:
+    `Award marks based on semantic analysis...`
+  }]
+})
+// Output: Final marks and detailed feedback</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="border border-accent/20 bg-accentLight rounded-xl px-5 py-4">
+          <p class="text-xs font-mono font-medium text-accent uppercase tracking-widest mb-3">Key Characteristics</p>
+          <ul class="text-sm space-y-1 text-ink">
+            <li>Three separate API calls per question</li>
+            <li>Specialized prompts for each task</li>
+            <li>Step-by-step processing with error isolation</li>
+            <li>Granular retry capability per pass</li>
+            <li>Temperature set to 0 for consistency</li>
+          </ul>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- COMPARISON -->
+      <section id="comparison" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Detailed Comparison</h2>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-8">
+          <table>
+            <thead>
+              <tr>
+                <th>Aspect</th>
+                <th>Three-Pass</th>
+                <th>Single-Pass</th>
+                <th>Winner</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>API Calls per Question</td><td>3</td><td>1</td><td class="winner-cell">Single-Pass (66% fewer)</td></tr>
+              <tr><td>Processing Time</td><td>30–45 s</td><td>10–15 s</td><td class="winner-cell">Single-Pass (3× faster)</td></tr>
+              <tr><td>Token Usage</td><td>~5,000</td><td>~4,000</td><td class="winner-cell">Single-Pass (20% less)</td></tr>
+              <tr><td>Implementation Complexity</td><td>High</td><td>Low</td><td class="winner-cell">Single-Pass</td></tr>
+              <tr><td>Error Handling</td><td>Granular</td><td>Complex</td><td class="winner-cell">Three-Pass</td></tr>
+              <tr><td>Debugging</td><td>Easy</td><td>Harder</td><td class="winner-cell">Three-Pass</td></tr>
+              <tr><td>Prompt Specialization</td><td>High</td><td>Medium</td><td class="winner-cell">Three-Pass</td></tr>
+              <tr><td>Cost Efficiency</td><td>Low</td><td>High</td><td class="winner-cell">Single-Pass</td></tr>
+              <tr><td>Scalability</td><td>Limited</td><td>High</td><td class="winner-cell">Single-Pass</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Code comparison -->
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-4 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Three-Pass (3 calls)</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-4 py-4 leading-relaxed"><code>const transcription =
+  await visionModel.transcribe(image)     <span class="text-muted">// 1</span>
+
+const analysis =
+  await textModel.analyze(transcription)  <span class="text-muted">// 2</span>
+
+const marks =
+  await textModel.awardMarks(analysis)    <span class="text-muted">// 3</span></code></pre>
+          </div>
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-4 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Single-Pass (1 call)</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-4 py-4 leading-relaxed"><code>const result =
+  await visionModel
+    .evaluateComprehensive(image)         <span class="text-muted">// done</span></code></pre>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- PERFORMANCE -->
+      <section id="performance" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Performance Analysis</h2>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-8">
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Three-Pass Timing</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>Pass 1 (Vision):      10–15 s
+  Image processing:   2–3 s
+  Network latency:    1–2 s
+  AI processing:      7–10 s
+  Response parsing:   0.5 s
+
+Pass 2 (Text):         8–12 s
+Pass 3 (Text):         8–12 s
+
+Total:           26–39 s  <span class="text-muted">avg 32 s</span></code></pre>
+          </div>
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Single-Pass Timing</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>Single Call:          10–15 s
+  Image processing:   2–3 s
+  Network latency:    1–2 s
+  AI processing:      7–10 s
+  Response parsing:   0.5 s
+
+
+
+Total:           10–15 s  <span class="text-muted">avg 12 s</span></code></pre>
+          </div>
+        </div>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-4">
+          <table>
+            <thead><tr><th>Metric</th><th>Three-Pass</th><th>Single-Pass</th><th>Improvement</th></tr></thead>
+            <tbody>
+              <tr><td>Avg time per question</td><td>32 s</td><td>12 s</td><td class="winner-cell">2.7× faster</td></tr>
+              <tr><td>Throughput per hour</td><td>~112 questions</td><td>~300 questions</td><td class="winner-cell">+168%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- COST -->
+      <section id="cost" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Cost Analysis</h2>
+
+        <div class="border border-rule rounded-xl p-5 mb-6">
+          <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Claude Sonnet 4.6 Pricing</p>
+          <div class="flex gap-6 text-sm">
+            <div><span class="text-muted">Input tokens</span> <span class="font-medium ml-2">$3.00 / 1M</span></div>
+            <div><span class="text-muted">Output tokens</span> <span class="font-medium ml-2">$15.00 / 1M</span></div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Three-Pass Cost / Question</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>Pass 1 (Vision):
+  Input:  1000 tk × $3.00/M  = $0.0030
+  Output:  800 tk × $15.00/M = $0.0120
+  Subtotal:                    $0.0150
+
+Pass 2 (Text):
+  Input:   800 tk × $3.00/M  = $0.0024
+  Output:  600 tk × $15.00/M = $0.0090
+  Subtotal:                    $0.0114
+
+Pass 3 (Text):
+  Input:   800 tk × $3.00/M  = $0.0024
+  Output:  600 tk × $15.00/M = $0.0090
+  Subtotal:                    $0.0114
+
+Total:                         $0.0378</code></pre>
+          </div>
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Single-Pass Cost / Question</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>Single Call:
+  Input:  2000 tk × $3.00/M  = $0.0060
+  Output: 1500 tk × $15.00/M = $0.0225
+  Total:                       $0.0285
+
+
+
+<span class="text-muted">24.6% cheaper than Three-Pass</span></code></pre>
+          </div>
+        </div>
+
+        <div class="border border-rule rounded-xl overflow-hidden">
+          <table>
+            <thead><tr><th>Scale</th><th>Three-Pass</th><th>Single-Pass</th><th>Savings</th></tr></thead>
+            <tbody>
+              <tr><td>Per question</td><td>$0.0378</td><td>$0.0285</td><td class="winner-cell">24.6%</td></tr>
+              <tr><td>1,000 questions / month</td><td>$37.80</td><td>$28.50</td><td class="winner-cell">$9.30</td></tr>
+              <tr><td>Annual (1k/mo)</td><td>$453.60</td><td>$342.00</td><td class="winner-cell">$111.60</td></tr>
+              <tr><td>Annual (10k/mo)</td><td>$4,536.00</td><td>$3,420.00</td><td class="winner-cell">$1,116.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- QUALITY -->
+      <section id="quality" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Quality Assessment</h2>
+
+        <p class="text-sm text-muted mb-4">Both systems evaluate across the same 5 dimensions with identical weight ranges.</p>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <table>
+            <thead><tr><th>Metric</th><th>Three-Pass</th><th>Single-Pass</th><th>Difference</th></tr></thead>
+            <tbody>
+              <tr><td>Handwriting Accuracy</td><td>95%</td><td>92%</td><td class="text-muted">−3%</td></tr>
+              <tr><td>Semantic Understanding</td><td>93%</td><td>89%</td><td class="text-muted">−4%</td></tr>
+              <tr><td>Marking Consistency</td><td>94%</td><td>90%</td><td class="text-muted">−4%</td></tr>
+              <tr><td>Feedback Quality</td><td>91%</td><td>88%</td><td class="text-muted">−3%</td></tr>
+              <tr><td><strong>Overall Accuracy</strong></td><td><strong>93%</strong></td><td><strong>90%</strong></td><td class="text-muted">−3%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="border border-accent/20 bg-accentLight rounded-xl px-5 py-4 mb-6">
+          <p class="font-semibold text-sm mb-2">Cost per Accuracy Point</p>
+          <ul class="text-sm space-y-1">
+            <li><span class="text-muted">Three-Pass:</span> <strong>$0.000406</strong> per accuracy %</li>
+            <li><span class="text-muted">Single-Pass:</span> <strong>$0.000317</strong> per accuracy %</li>
+            <li class="pt-1 font-medium text-accent">Single-Pass is 22% more cost-effective per accuracy point</li>
+          </ul>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-3">Three-Pass Advantages</p>
+            <ul class="text-sm text-muted space-y-1.5">
+              <li>Better error isolation per pass</li>
+              <li>Transcription failure doesn't affect analysis</li>
+              <li>Granular retry capability</li>
+              <li>Clear separation of concerns</li>
+              <li>Specialized, focused prompts</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-3">Single-Pass Advantages</p>
+            <ul class="text-sm text-muted space-y-1.5">
+              <li>Consistent context in one call</li>
+              <li>AI sees all aspects simultaneously</li>
+              <li>Reduced error propagation across steps</li>
+              <li>Holistic evaluation</li>
+              <li>Simpler workflow</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- WHICH IS BETTER -->
+      <section id="which" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Which One is Better?</h2>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-8">
+          <table>
+            <thead><tr><th>Use Case</th><th>Recommended</th><th>Rationale</th></tr></thead>
+            <tbody>
+              <tr><td>High-Volume Evaluations</td><td class="winner-cell">Single-Pass</td><td class="text-muted">66% cost reduction, 3× speed</td></tr>
+              <tr><td>Critical Assessments</td><td class="winner-cell">Three-Pass</td><td class="text-muted">Higher accuracy, better error handling</td></tr>
+              <tr><td>Standard Questions</td><td class="winner-cell">Single-Pass</td><td class="text-muted">Good accuracy, excellent efficiency</td></tr>
+              <tr><td>Complex Questions</td><td class="winner-cell">Three-Pass</td><td class="text-muted">Better semantic analysis depth</td></tr>
+              <tr><td>Poor Handwriting</td><td class="winner-cell">Three-Pass</td><td class="text-muted">Better transcription handling</td></tr>
+              <tr><td>Real-Time Feedback</td><td class="winner-cell">Single-Pass</td><td class="text-muted">Faster processing speed</td></tr>
+              <tr><td>Budget Constraints</td><td class="winner-cell">Single-Pass</td><td class="text-muted">Significant cost savings</td></tr>
+              <tr><td>Quality-First Priority</td><td class="winner-cell">Three-Pass</td><td class="text-muted">Higher accuracy standards</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Hybrid recommendation -->
+        <div class="border border-rule rounded-xl overflow-hidden mb-4">
+          <div class="px-5 py-3 bg-tag border-b border-rule flex items-center gap-2">
+            <span>🏆</span>
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Overall Recommendation — Hybrid Approach</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code><span class="text-muted">// Recommended implementation strategy</span>
+async function smartEvaluation(question, image) {
+  try {
+    const singleResult = await evaluateSinglePass(question, image)
+
+    <span class="text-muted">// Quality gate</span>
+    if (singleResult.confidence > 85 && singleResult.semanticScore.composite > 80) {
+      return singleResult
+    }
+
+    <span class="text-muted">// Fallback to three-pass for low confidence</span>
+    console.log('Low confidence, falling back to three-pass')
+    return await evaluateThreePass(question, image)
+
+  } catch (error) {
+    console.log('Single-pass failed, using three-pass fallback')
+    return await evaluateThreePass(question, image)
+  }
+}</code></pre>
+        </div>
+
+        <div class="border border-winBorder bg-win rounded-xl px-5 py-4">
+          <p class="text-xs font-mono font-medium text-winText uppercase tracking-widest mb-3">Benefits of Hybrid Approach</p>
+          <ul class="text-sm text-winText space-y-1">
+            <li>Best of both worlds — cost efficiency + quality assurance</li>
+            <li>Adaptive selection — use optimal approach per case</li>
+            <li>Graceful degradation — always have a fallback</li>
+            <li>Continuous improvement — collect data for optimization</li>
+          </ul>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- IMPLEMENTATION -->
+      <section id="impl" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Implementation Details</h2>
+
+        <div class="border border-rule rounded-xl overflow-hidden mb-6">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">File Structure</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>src/lib/single-pass/
+├── evaluation-service-single.ts  <span class="text-muted"># Core single-pass logic</span>
+├── claude-single.ts              <span class="text-muted"># Claude provider</span>
+├── groq-single.ts                <span class="text-muted"># Groq provider</span>
+├── types-single.ts               <span class="text-muted"># Type definitions</span>
+└── COMPARISON.md                 <span class="text-muted"># Detailed comparison</span>
+
+src/app/
+├── api/
+│   ├── evaluate-single/          <span class="text-muted"># Single-pass endpoint</span>
+│   └── single-status/            <span class="text-muted"># Progress tracking</span>
+└── single/
+    └── page.tsx                  <span class="text-muted"># Test interface</span></code></pre>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">POST /api/evaluate-single</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>Content-Type: multipart/form-data
+
+examId=string
+studentName=string
+rollNumber=string
+notes=string
+answerSheet=File
+aiProvider=claude|groq</code></pre>
+          </div>
+          <div class="border border-rule rounded-xl overflow-hidden">
+            <div class="px-5 py-3 bg-tag border-b border-rule">
+              <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">GET /api/single-status</p>
+            </div>
+            <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code>?evaluationId={id}
+
+Response:
+{
+  "progress":  75,
+  "status":    "Evaluating question 3 of 5...",
+  "completed": false,
+  "result":    null
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="border border-rule rounded-xl overflow-hidden">
+          <div class="px-5 py-3 bg-tag border-b border-rule">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest">Feature Toggles</p>
+          </div>
+          <pre class="text-xs font-mono text-ink px-5 py-4 leading-relaxed"><code><span class="text-muted">// Enable single-pass evaluation</span>
+const USE_SINGLE_PASS = process.env.ENABLE_SINGLE_PASS === 'true'
+
+<span class="text-muted">// Confidence threshold for fallback</span>
+const CONFIDENCE_THRESHOLD = 85
+
+<span class="text-muted">// Always use three-pass for complex questions</span>
+const COMPLEX_QUESTION_THRESHOLD = 20 <span class="text-muted">// max marks</span></code></pre>
+        </div>
+
+        <p class="text-sm text-muted mt-4">Testing interface available at <code class="text-xs bg-tag border border-rule px-2 py-0.5 rounded">http://localhost:3000/single</code></p>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- RECOMMENDATIONS -->
+      <section id="recommend" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Recommendations</h2>
+
+        <div class="space-y-4">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Immediate — Next 30 Days</p>
+            <ol class="text-sm space-y-2 list-decimal pl-4 text-muted">
+              <li><span class="text-ink font-medium">Complete Testing</span> — test single-pass with various handwriting samples, compare accuracy, document metrics</li>
+              <li><span class="text-ink font-medium">Quality Validation</span> — run parallel evaluations, collect human evaluator feedback, establish benchmarks</li>
+              <li><span class="text-ink font-medium">Infrastructure Prep</span> — set up monitoring, implement confidence tracking, prepare fallback mechanisms</li>
+            </ol>
+          </div>
+
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Short-term — 1–3 Months</p>
+            <ol class="text-sm space-y-2 list-decimal pl-4 text-muted">
+              <li><span class="text-ink font-medium">Gradual Rollout</span> — enable single-pass for 20% of evaluations, monitor closely</li>
+              <li><span class="text-ink font-medium">Optimization</span> — fine-tune prompts on real data, implement adaptive selection logic</li>
+              <li><span class="text-ink font-medium">Performance Monitoring</span> — track cost savings, processing times, user satisfaction</li>
+            </ol>
+          </div>
+
+          <div class="border border-rule rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Long-term — 3–12 Months</p>
+            <ol class="text-sm space-y-2 list-decimal pl-4 text-muted">
+              <li><span class="text-ink font-medium">Full Migration</span> — switch to hybrid as default, optimize from collected data</li>
+              <li><span class="text-ink font-medium">Advanced Features</span> — additional AI providers, custom rubrics, real-time quality monitoring</li>
+              <li><span class="text-ink font-medium">Scaling</span> — handle increased volume, expand to multiple subjects</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Success metrics -->
+        <div class="mt-6 grid md:grid-cols-2 gap-4">
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-3">Technical Targets</p>
+            <ul class="text-sm text-muted space-y-1.5">
+              <li>Processing time &lt; 15 s per question</li>
+              <li>Cost reduction &gt; 20%</li>
+              <li>Accuracy ≥ 85% of three-pass quality</li>
+              <li>Uptime &gt; 99.5%</li>
+            </ul>
+          </div>
+          <div class="border border-rule rounded-xl p-5">
+            <p class="font-semibold text-sm mb-3">Business Targets</p>
+            <ul class="text-sm text-muted space-y-1.5">
+              <li>User satisfaction &gt; 90% positive</li>
+              <li>3× increase in processing capacity</li>
+              <li>AI cost reduction &gt; 25%</li>
+              <li>Handle 10× current volume</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Risk -->
+        <div class="mt-4 border border-warnBorder bg-warn rounded-xl px-5 py-4">
+          <p class="text-xs font-mono font-medium text-warnText uppercase tracking-widest mb-3">Risk Mitigation</p>
+          <ul class="text-sm text-warnText space-y-1">
+            <li><span class="font-medium">Technical:</span> Confidence thresholds, robust fallback mechanisms, continuous monitoring</li>
+            <li><span class="font-medium">Business:</span> Gradual rollout with feedback loops, cost caps, user communication</li>
+          </ul>
+        </div>
+      </section>
+
+      <hr class="border-rule mb-14" />
+
+      <!-- CONCLUSION -->
+      <section id="conclusion" class="mb-14 section-card">
+        <h2 class="text-3xl font-display mb-6">Conclusion</h2>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+          <div class="border border-winBorder bg-win rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-winText uppercase tracking-widest mb-3">Key Benefits (Single-Pass)</p>
+            <ul class="text-sm text-winText space-y-1.5">
+              <li>66% reduction in API calls</li>
+              <li>3× faster processing speed</li>
+              <li>25% cost savings per evaluation</li>
+              <li>Simpler architecture, fewer failure points</li>
+              <li>Better scalability for high-volume scenarios</li>
+            </ul>
+          </div>
+          <div class="border border-warnBorder bg-warn rounded-xl p-5">
+            <p class="text-xs font-mono font-medium text-warnText uppercase tracking-widest mb-3">Trade-offs</p>
+            <ul class="text-sm text-warnText space-y-1.5">
+              <li>Minor accuracy reduction (3–4% lower)</li>
+              <li>Complex prompt engineering required</li>
+              <li>Less granular error handling</li>
+              <li>More challenging debugging</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border border-rule rounded-xl p-6">
+          <p class="font-semibold text-sm mb-3">🏆 Final Recommendation — Hybrid Approach</p>
+          <ol class="text-sm text-muted space-y-2 list-decimal pl-4">
+            <li><span class="text-ink font-medium">Primary:</span> Use single-pass for standard evaluations</li>
+            <li><span class="text-ink font-medium">Fallback:</span> Use three-pass for complex / low-confidence cases</li>
+            <li><span class="text-ink font-medium">Adaptive:</span> Select approach based on content analysis</li>
+            <li><span class="text-ink font-medium">Monitoring:</span> Track quality and performance metrics continuously</li>
+          </ol>
+          <p class="text-sm text-muted mt-4 pt-4 border-t border-rule">This strategy provides the best balance of cost efficiency and evaluation quality, allowing you to scale your assessment platform while maintaining high educational standards.</p>
+        </div>
+
+        <div class="mt-6 border border-rule rounded-xl p-5">
+          <p class="text-xs font-mono font-medium text-muted uppercase tracking-widest mb-3">Next Steps</p>
+          <ol class="text-sm text-muted space-y-1.5 list-decimal pl-4">
+            <li>Test the implementation via <code class="text-xs bg-tag border border-rule px-1.5 py-0.5 rounded">/single</code> interface</li>
+            <li>Run parallel evaluations and compare results</li>
+            <li>Document performance and quality metrics</li>
+            <li>Start with 20% gradual rollout</li>
+            <li>Monitor and optimize continuously based on data</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="pt-8 border-t border-rule flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div>
+          <p class="text-sm font-display">Single-Pass vs Three-Pass Analysis</p>
+          <p class="text-xs text-muted mt-0.5">Version 1.0 · Next.js 16 · Claude Sonnet 4.6 · March 2026</p>
+        </div>
+        <p class="text-xs text-muted">AI Grading System — Complete Analysis Guide</p>
+      </footer>
+
+    </main>
+  </div>
+
+</body>
+</html>

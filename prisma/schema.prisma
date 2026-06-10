@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  exams     Exam[]
+  evaluations Evaluation[]
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Exam {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  subject     String?
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  questions   Question[]
+  documents   Document[]
+  evaluations Evaluation[]
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  examId      String
+  questionNumber Int
+  questionText String
+  maxMarks    Float
+  modelAnswer String?
+  rubric      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  exam        Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  evaluations QuestionEvaluation[]
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  examId      String
+  fileName    String
+  fileUrl     String
+  fileType    String // 'pdf' or 'image'
+  pageCount   Int
+  uploadedAt  DateTime @default(now())
+  processedAt DateTime?
+
+  exam        Exam              @relation(fields: [examId], references: [id], onDelete: Cascade)
+  evaluations Evaluation[]
+}
+
+model Evaluation {
+  id            String   @id @default(cuid())
+  documentId    String?
+  examId        String?
+  studentName   String?
+  totalMarks    Float
+  maxMarks      Float
+  percentage    Float
+  grade         String?
+  overallFeedback String
+  confidence    Float
+  status        String // 'processing', 'completed', 'failed'
+  evaluatedAt   DateTime @default(now())
+  evaluatedById String?
+
+  exam          Exam?    @relation(fields: [examId], references: [id])
+  document      Document?             @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  questionEvaluations QuestionEvaluation[]
+  evaluatedBy   User?               @relation(fields: [evaluatedById], references: [id])
+}
+
+model QuestionEvaluation {
+  id              String   @id @default(cuid())
+  evaluationId    String
+  questionId      String
+  obtainedMarks   Float
+  maxMarks        Float
+  confidence      Float
+  strength        String?
+  mistakes        String?
+  missingConcepts String?
+  suggestions     String?
+  reasoning       String
+  pageNumbers     String // comma-separated page numbers where answer was found
+  studentAnswerImage String? // Base64 image data of student's answer
+  studentAnswer    String? // Extracted text from student's answer image
+
+  evaluation      Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+  question        Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([evaluationId, questionId])
+}
